@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="RDPServer.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="MonitorArea" Type="System.Drawing.Rectangle" Scope="Application">
+      <Value Profile="(Default)">0, 0, 720, 576</Value>
+    </Setting>
+    <Setting Name="Application" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">cmd.exe</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

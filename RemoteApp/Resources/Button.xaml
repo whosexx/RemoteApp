@@ -1,0 +1,191 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <PathGeometry x:Key="center" Figures="M3.586,9 L4,9 4.414,9 2,11.414 2,14 14,14 14,11.414 11.586,9 12,9 12.414,9 16,10.586 16,15 C16,15.552 15.552,16 15,16 L1,16 C0.44799995,16 0,15.552 0,15 L0,10.586 z M8,0 L12,4 9,4 9,10 7,10 7,4 4,4 z" />
+    <PathGeometry x:Key="max" Figures="M10,0 L16,0 16,6 14,6 14,3.2019999 6.6009998,10.601 5.4000001,9.3999996 12.799999,2 10,2 z M0,0 L8,0 8,2 2,2 2,14 14,14 14,8 16,8 16,16 0,16 z" />
+    <PathGeometry x:Key="back" Figures="M2,5 L2,12 11,12 11,5 z M0,3 L13,3 13,14 0,14 z M4,0 L16,0 16,11 14,11 14,9 14,2 6,2 4,2 z" />
+    <PathGeometry x:Key="full" Figures="M5,9 L7,9 7,11 6,11 6,12 5,12 5,13 4,13 4,14 5,14 5,15 6,15 6,16 0,16 0,10 1,10 1,11 2,11 2,12 3,12 3,11 4,11 4,10 5,10&#xD;&#xA; z M13,6 L14,6 14,14 6,14 6,13 7,13 7,12 12,12 12,7 13,7 z M2,2 L10,2 10,3 9,3 9,4 4,4 4,9 3,9 3,10 2,10 z M10,0 L16,0 16,6 15,6 15,5 14,5 14,4 13,4 13,5 12,5 12,6 11,6 11,7 9,7 9,5 10,5 10,4 11,4 11,3 12,3 12,2 11,2 11,1 10,1&#xD;&#xA; z" />
+    <PathGeometry x:Key="plus" Figures="M13,9L9,9 9,13 7,13 7,9 3,9 3,7 7,7 7,3 9,3 9,7 13,7z M13,0L3,0C1.343,0,0,1.343,0,3L0,13C0,14.657,1.343,16,3,16L13,16C14.657,16,16,14.657,16,13L16,3C16,1.343,14.657,0,13,0" />
+    
+    <Style x:Key="btn" TargetType="Button">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="Transparent" x:Name="bord" Width="16" Height="16" CornerRadius="10">
+                        <ContentPresenter VerticalAlignment="Center">
+                            <ContentPresenter.Content>
+                                <Path Margin="3" RenderTransformOrigin="0.5,0.5" x:Name="PART_CLOSE" 
+                                      Data="F1M34.121,7.121C34.121,7.121 22.243,19 22.243,19 22.243,19 34.121,30.879 34.121,30.879 34.664,31.422 35,32.172 35,33 35,34.657 33.657,36 32,36 31.172,36 30.422,35.664 29.879,35.121 29.879,35.121 18,23.243 18,23.243 18,23.243 6.121,35.121 6.121,35.121 5.578,35.664 4.828,36 4,36 2.343,36 1,34.657 1,33 1,32.172 1.336,31.422 1.879,30.879 1.879,30.879 13.757,19 13.757,19 13.757,19 1.879,7.121 1.879,7.121 1.336,6.579 1,5.828 1,5 1,3.343 2.343,2 4,2 4.828,2 5.578,2.336 6.121,2.879 6.121,2.879 18,14.757 18,14.757 18,14.757 29.879,2.879 29.879,2.879 30.422,2.336 31.172,2 32,2 33.657,2 35,3.343 35,5 35,5.828 34.664,6.579 34.121,7.121z" 
+                                      Fill="SteelBlue" Stretch="Fill">
+                                    <Path.RenderTransform>
+                                        <RotateTransform />
+                                    </Path.RenderTransform>
+                                </Path>
+                            </ContentPresenter.Content>
+                        </ContentPresenter>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bord" Property="Background" Value="OrangeRed" />
+                            <Setter TargetName="PART_CLOSE" Property="Fill" Value="White" />
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation To="180" Duration="0:0:0.2" Storyboard.TargetName="PART_CLOSE" Storyboard.TargetProperty="RenderTransform.Angle" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0:0:0.1" Storyboard.TargetName="PART_CLOSE" Storyboard.TargetProperty="RenderTransform.Angle" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="bord" Property="Background" Value="Green" />
+                            <Setter TargetName="PART_CLOSE" Property="Fill" Value="White" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--<Style x:Key="circle" TargetType="Button">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="Transparent" x:Name="bord" Width="16" Height="16" CornerRadius="10">
+                        <ContentPresenter VerticalAlignment="Center">
+                            <ContentPresenter.Content>
+                                <Path Margin="2.5" RenderTransformOrigin="0.5,0.5" x:Name="PART_CLOSE" 
+                                      Data="M10,0 L16,0 16,6 14,6 14,3.2019999 6.6009998,10.601 5.4000001,9.3999996 12.799999,2 10,2 z M0,0 L8,0 8,2 2,2 2,14 14,14 14,8 16,8 16,16 0,16 z" 
+                                      Fill="RoyalBlue" Stretch="Fill">
+                                    <Path.RenderTransform>
+                                        <RotateTransform />
+                                    </Path.RenderTransform>
+                                </Path>
+                            </ContentPresenter.Content>
+                        </ContentPresenter>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bord" Property="Background" Value="OrangeRed" />
+                            <Setter TargetName="PART_CLOSE" Property="Fill" Value="White" />
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation To="360" Duration="0:0:0.4" Storyboard.TargetName="PART_CLOSE" Storyboard.TargetProperty="RenderTransform.Angle" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0:0:1" Storyboard.TargetName="PART_CLOSE" Storyboard.TargetProperty="RenderTransform.Angle" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="bord" Property="Background" Value="Green" />
+                            <Setter TargetName="PART_CLOSE" Property="Fill" Value="White" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>-->
+
+    <Style x:Key="Circle1" TargetType="Button">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="Transparent" x:Name="bord" Width="{TemplateBinding Width}" 
+                            Height="{TemplateBinding Height}" CornerRadius="10">
+                        <ContentPresenter VerticalAlignment="Center">
+                            <ContentPresenter.Content>
+                                <Path Margin="2" x:Name="PART_CLOSE"
+                                      Fill="SteelBlue" Stretch="Fill" Data="{TemplateBinding Content}" />
+                            </ContentPresenter.Content>
+                        </ContentPresenter>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bord" Property="Background" Value="Red" />
+                            <Setter TargetName="PART_CLOSE" Property="Fill" Value="White" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="bord" Property="Background" Value="Green" />
+                            <Setter TargetName="PART_CLOSE" Property="Fill" Value="White" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="PART_CLOSE" Property="Fill" Value="Gray" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="RotateCircle" TargetType="Button">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="Transparent" x:Name="bord" Width="16" Height="16" CornerRadius="10">
+                        <ContentPresenter VerticalAlignment="Center">
+                            <ContentPresenter.Content>
+                                <Path Margin="2" RenderTransformOrigin="0.5,0.5" x:Name="PART_CLOSE"                                        
+                                      Fill="SteelBlue" Stretch="Fill" Data="{TemplateBinding Content}">
+                                    <Path.RenderTransform>
+                                        <RotateTransform />
+                                    </Path.RenderTransform>
+                                </Path>
+                            </ContentPresenter.Content>
+                        </ContentPresenter>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bord" Property="Background" Value="OrangeRed" />
+                            <Setter TargetName="PART_CLOSE" Property="Fill" Value="White" />
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation To="360" Duration="0:0:0.4" Storyboard.TargetName="PART_CLOSE" Storyboard.TargetProperty="RenderTransform.Angle" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0:0:1" Storyboard.TargetName="PART_CLOSE" Storyboard.TargetProperty="RenderTransform.Angle" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="bord" Property="Background" Value="Green" />
+                            <Setter TargetName="PART_CLOSE" Property="Fill" Value="White" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="PART_CLOSE" Property="Fill" Value="Gray" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

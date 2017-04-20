@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="1c42e103-65f4-4229-bfe6-b14de3fdd89c" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings>
+      <CollectionMapping TypeName="System.Collections.Generic.List`1" Category="List" />
+    </CollectionMappings>
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:54321/RDPSrv/Service" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="Service.xsd" MetadataType="Schema" ID="d695238f-d27d-4c41-b09b-258da48944b6" SourceId="1" SourceUrl="http://localhost:54321/RDPSrv/Service?xsd=xsd2" />
+    <MetadataFile FileName="Service.disco" MetadataType="Disco" ID="c5784ba5-56bf-49a0-ba17-27206da73b90" SourceId="1" SourceUrl="http://localhost:54321/RDPSrv/Service?disco" />
+    <MetadataFile FileName="Service1.xsd" MetadataType="Schema" ID="57dd3cba-b71c-448f-b2f5-74d3941e78ff" SourceId="1" SourceUrl="http://localhost:54321/RDPSrv/Service?xsd=xsd0" />
+    <MetadataFile FileName="Service2.xsd" MetadataType="Schema" ID="78e09e10-f815-41f0-8086-4dd0656e2d96" SourceId="1" SourceUrl="http://localhost:54321/RDPSrv/Service?xsd=xsd1" />
+    <MetadataFile FileName="Service.wsdl" MetadataType="Wsdl" ID="63df86e6-da23-4a19-b53d-4fa86b8870f3" SourceId="1" SourceUrl="http://localhost:54321/RDPSrv/Service?wsdl=wsdl0" />
+    <MetadataFile FileName="RDPService.wsdl" MetadataType="Wsdl" ID="130d8e13-0081-42de-a238-f0bde869b03b" SourceId="1" SourceUrl="http://localhost:54321/RDPSrv/Service?wsdl" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

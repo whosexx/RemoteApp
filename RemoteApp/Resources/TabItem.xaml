@@ -1,0 +1,120 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:s="clr-namespace:System;assembly=mscorlib"
+                    xmlns:local="clr-namespace:RemoteApp">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Button.xaml" />
+        <ResourceDictionary Source="ContextMenu.xaml" />
+        <ResourceDictionary>
+            <local:BitmapSourceWidthConverter x:Key="bswc" />
+            <local:BitmapVisibilityConverter x:Key="bvc" />
+            <local:Client2ToolTip x:Key="c2t" />
+        </ResourceDictionary>
+    </ResourceDictionary.MergedDictionaries>
+
+
+    <PathGeometry x:Key="TabHeader" Figures="M0.174,36.677C0.174,36.677 1.209,37.06 3.155,35.052 7.269,30.81 14.822,0.969 24.364,0.551 27.659,0.406 61.238,0.606 107.072,0.695 150.752, 0.606 182.752,0.406 185.892,0.551 C194.986,0.969 202.184,30.81 206.104,35.052 C207.958,37.06 208.944,36.677 208.944,36.677" />
+    
+    <PathGeometry x:Key="left" Figures="M0.174,36.677C0.174,36.677 1.209,37.06 3.155,35.052 7.269,30.81 14.822,0.969 24.364,0.551" />
+    <PathGeometry x:Key="left_background" Figures="M0.174,36.677C0.174,36.677 1.209,37.06 3.155,35.052 7.269,30.81 14.822,0.969 24.364,0.551L24.364,36.677Z" />
+    <PathGeometry x:Key="right" Figures="M185.892,0.551C194.986,0.969 202.184,30.81 206.104,35.052 C207.958,37.06 208.944,36.677 208.944,36.677" />
+    <PathGeometry x:Key="right_background" Figures="M185.892,0.551C194.986,0.969 202.184,30.81 206.104,35.052 C207.958,37.06 208.944,36.677 208.944,36.677L185.892,36.677Z" />
+    
+    <Style x:Key="tabitem" TargetType="TabItem">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Panel.ZIndex" Value="{Binding RInfo.EHost.RZIndex}" />
+        <Setter Property="Header" Value="{Binding RInfo.Alias}" />
+        <Setter Property="Content" Value="{Binding RInfo.EHost.Host}" />        
+        <Setter Property="FontSize" Value="17" />
+        <Setter Property="Height" Value="25" />
+        <Setter Property="FontFamily" Value="幼圆" />
+        <Setter Property="ToolTip" Value="{Binding Converter={StaticResource c2t}}" />
+        <Setter Property="ContextMenu" Value="{StaticResource menu}" />
+        
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabItem}">
+                    <ControlTemplate.Resources>
+                        <LinearGradientBrush x:Key="bd_bg" StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.GradientStops>
+                                <GradientStop Color="#FFEAF6FD" Offset="0.15" />
+                                <GradientStop Color="#FFD9F0FC" Offset="0.5" />
+                                <GradientStop Color="#FFBEE6FD" Offset="0.5" />
+                                <GradientStop Color="#FFA7D9F5" Offset="1" />
+                            </LinearGradientBrush.GradientStops>
+                        </LinearGradientBrush>
+                    </ControlTemplate.Resources>
+                    <Grid Background="{x:Null}" Margin="0,2,-15,0" x:Name="bord">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <Path Name="Bg1" Data="{StaticResource left_background}" Stroke="{x:Null}"
+                                      Fill="{TemplateBinding Panel.Background}" StrokeThickness="0" Stretch="Fill" Width="15" />
+                        <Path Name="Bd1" Data="{StaticResource left}" Stroke="{TemplateBinding Border.BorderBrush}"
+                                      Fill="{x:Null}" StrokeThickness="1" Stretch="Fill" Width="15" SnapsToDevicePixels="True" />
+
+                        <Border Name="Bd" Grid.Column="1" Background="{TemplateBinding Panel.Background}" 
+                                BorderBrush="{TemplateBinding Border.BorderBrush}" BorderThickness="0,1,0,0"
+                                SnapsToDevicePixels="True" Margin="-0.3,0,-0.3,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="auto" />
+                                </Grid.ColumnDefinitions>
+                                <Image Grid.Column="0" Source="{Binding RDPIcon}" 
+                                           Width="{Binding Converter={StaticResource bswc}}" Height="16"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+                                <Grid Grid.Column="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <ContentPresenter RecognizesAccessKey="True" ContentSource="Header" Name="Content"                                                                         
+                                            HorizontalAlignment="Left" VerticalAlignment="Center" Margin="3,0,0,0" 
+                                            Content="{TemplateBinding HeaderedContentControl.Header}" 
+                                            ContentTemplate="{TemplateBinding HeaderedContentControl.HeaderTemplate}" 
+                                            ContentStringFormat="{TemplateBinding HeaderedContentControl.HeaderStringFormat}"/>
+
+                                    <Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="1,0,0,0" Grid.Column="1"
+                                                Style="{StaticResource RotateCircle}" Command="local:DCommand.Max"  Content="{StaticResource max}"
+                                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=TabItem, Mode=FindAncestor}, Path=DataContext}" 
+                                                Visibility="{Binding Converter={StaticResource bvc}}" />
+                                </Grid>
+
+                                <Button Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"
+                                            Style="{StaticResource btn}" Command="{x:Static ApplicationCommands.Close}" 
+                                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=TabItem, Mode=FindAncestor}, Path=DataContext}" />
+                            </Grid>
+                        </Border>
+                        <Path Name="Bg2" Grid.Column="2" Data="{StaticResource right_background}" Stroke="{x:Null}"
+                                    Fill="{TemplateBinding Panel.Background}" StrokeThickness="0" Stretch="Fill" Width="15" />
+                        <Path Name="Bd2" Grid.Column="2" Data="{StaticResource right}" Stroke="{TemplateBinding Border.BorderBrush}"
+                                    Fill="{x:Null}" StrokeThickness="1" Stretch="Fill" Width="15" SnapsToDevicePixels="True" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="UIElement.IsMouseOver" Value="True">
+                            <Setter Property="Panel.Background" TargetName="Bd" Value="{StaticResource bd_bg}" />
+                            <Setter Property="Fill" TargetName="Bg1" Value="{StaticResource bd_bg}" />
+                            <Setter Property="Fill" TargetName="Bg2" Value="{StaticResource bd_bg}" />
+                        </Trigger>
+                        <Trigger Property="Selector.IsSelected" Value="True">
+                            <Setter Property="Panel.ZIndex" Value="100" />
+                            <Setter Property="Stroke" TargetName="Bd1" Value="Red" />
+                            <Setter Property="Stroke" TargetName="Bd2" Value="Red" />
+                            <Setter Property="BorderBrush" TargetName="Bd" Value="Red" />
+                            <Setter Property="Border.Margin" TargetName="bord" Value="0,2,-15,-1" />
+
+                            <Setter Property="Panel.Background" TargetName="Bd" Value="White" />
+                            <Setter Property="Fill" TargetName="Bg1" Value="White" />
+                            <Setter Property="Fill" TargetName="Bg2" Value="White" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

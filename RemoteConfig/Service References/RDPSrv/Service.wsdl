@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://RDPServie/Lucy" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://RDPServie/Lucy" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://RDPServie/Lucy/Imports">
+      <xsd:import schemaLocation="http://localhost:54321/RDPSrv/Service?xsd=xsd0" namespace="http://RDPServie/Lucy" />
+      <xsd:import schemaLocation="http://localhost:54321/RDPSrv/Service?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:54321/RDPSrv/Service?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/System.Drawing" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IRDPService_GetDesktopSharedString_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetDesktopSharedString" />
+  </wsdl:message>
+  <wsdl:message name="IRDPService_GetDesktopSharedString_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetDesktopSharedStringResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRDPService_SetDesktopSharedRect_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetDesktopSharedRect" />
+  </wsdl:message>
+  <wsdl:message name="IRDPService_SetDesktopSharedRect_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetDesktopSharedRectResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRDPService_GetDesktopSharedRect_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetDesktopSharedRect" />
+  </wsdl:message>
+  <wsdl:message name="IRDPService_GetDesktopSharedRect_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetDesktopSharedRectResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRDPService_NotifyMsg_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:NotifyMsg" />
+  </wsdl:message>
+  <wsdl:message name="IRDPService_NotifyMsg_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:NotifyMsgResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IRDPService">
+    <wsdl:operation name="GetDesktopSharedString">
+      <wsdl:input wsaw:Action="http://RDPServie/Lucy/IRDPService/GetDesktopSharedString" message="tns:IRDPService_GetDesktopSharedString_InputMessage" />
+      <wsdl:output wsaw:Action="http://RDPServie/Lucy/IRDPService/GetDesktopSharedStringResponse" message="tns:IRDPService_GetDesktopSharedString_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetDesktopSharedRect">
+      <wsdl:input wsaw:Action="http://RDPServie/Lucy/IRDPService/SetDesktopSharedRect" message="tns:IRDPService_SetDesktopSharedRect_InputMessage" />
+      <wsdl:output wsaw:Action="http://RDPServie/Lucy/IRDPService/SetDesktopSharedRectResponse" message="tns:IRDPService_SetDesktopSharedRect_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDesktopSharedRect">
+      <wsdl:input wsaw:Action="http://RDPServie/Lucy/IRDPService/GetDesktopSharedRect" message="tns:IRDPService_GetDesktopSharedRect_InputMessage" />
+      <wsdl:output wsaw:Action="http://RDPServie/Lucy/IRDPService/GetDesktopSharedRectResponse" message="tns:IRDPService_GetDesktopSharedRect_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="NotifyMsg">
+      <wsdl:output wsaw:Action="http://RDPServie/Lucy/IRDPService/NotifyMsg" message="tns:IRDPService_NotifyMsg_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://RDPServie/Lucy/IRDPService/NotifyMsgResponse" message="tns:IRDPService_NotifyMsg_InputCallbackMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+</wsdl:definitions>

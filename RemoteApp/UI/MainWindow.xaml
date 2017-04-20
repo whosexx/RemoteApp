@@ -1,0 +1,418 @@
+﻿<Window x:Class="RemoteApp.UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RemoteApp"
+        mc:Ignorable="d"        
+        Title="远程桌面监控" Height="900" Width="1500" 
+        Loaded="Window_Loaded" Closed="Window_Closed" 
+        WindowStartupLocation="CenterScreen" Closing="Window_Closing" KeyDown="Window_KeyDown"
+        LocationChanged="Window_LocationChanged" SizeChanged="Window_SizeChanged">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Resources/ListBoxItem.xaml" />
+                <ResourceDictionary Source="../Resources/TabItem.xaml" />
+                <ResourceDictionary Source="../Resources/OfficeTab.xaml" />
+                <ResourceDictionary Source="../Resources/Button.xaml" />
+                <ResourceDictionary>
+                    <local:Int2Visibility x:Key="i2v" />
+                    <local:VisibilityConverter x:Key="vc" />
+                    <local:VisibilityConverter Reverse="True" x:Key="rvc" />
+
+                    <local:ColorConverter x:Key="cc" />
+                    <ToolTip x:Key="tool">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="IP地址：" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding RInfo.Ip}" />
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="协   议：" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding RInfo.Protocol}" FontStyle="Italic" />
+                            
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="状   态：" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding RInfo.ConnectedStatus}" FontWeight="Bold" 
+                                       Foreground="{Binding RInfo.ConnectedStatus, Converter={StaticResource cc}}" />
+
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="备   注：" HorizontalAlignment="Right" />
+                            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding RInfo.Memo}" 
+                                       FontWeight="Bold" Foreground="Green" MaxWidth="150" TextWrapping="Wrap"/>
+                        </Grid>
+                    </ToolTip>
+
+                    <ContextMenu x:Key="menu">
+                        <!--<MenuItem Command="local:DCommand.VNC" 
+                                  CommandParameter="{Binding Parent.PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                            <MenuItem.Icon>
+                                <Image Source="pack://application:,,,/Resources/Monitor.png" Height="16" Width="16" Stretch="Uniform" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <MenuItem Command="local:DCommand.Monitor" 
+                                  CommandParameter="{Binding Parent.PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                            <MenuItem.Icon>
+                                <Image Source="pack://application:,,,/Resources/Monitor.png" Height="16" Width="16" Stretch="Uniform" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />-->
+                        <MenuItem Command="local:DCommand.Connect" 
+                                  CommandParameter="{Binding Parent.PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                            <MenuItem.Icon>
+                                <Image Source="pack://application:,,,/Resources/Computer.png" Height="16" Width="16" Stretch="Uniform" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Command="local:DCommand.DisConnected" 
+                                  CommandParameter="{Binding Parent.PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}"/>
+                        <Separator />
+                        <MenuItem Command="local:DCommand.Delete" 
+                                  CommandParameter="{Binding Parent.PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}"/>
+                        <Separator />
+                        <!--<MenuItem Command="local:DCommand.Shutdown" 
+                                  CommandParameter="{Binding Parent.PlacementTarget..DataContext, RelativeSource={RelativeSource Self}}" />
+                        <MenuItem Command="local:DCommand.Reboot" 
+                                  CommandParameter="{Binding Parent.PlacementTarget..DataContext, RelativeSource={RelativeSource Self}}" />
+                        <Separator />-->
+                        <MenuItem Command="local:DCommand.ModifyAlias" 
+                                  CommandParameter="{Binding Parent.PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}"/>
+                        <MenuItem Command="local:DCommand.Edit" 
+                                  CommandParameter="{Binding Parent.PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}"/>
+                        <Separator />
+                        <MenuItem Command="local:DCommand.Max" 
+                                  CommandParameter="{Binding Parent.PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}"/>
+                    </ContextMenu>
+
+                    <ContextMenu x:Key="menu1">
+                        <MenuItem Command="local:DCommand.Edit" 
+                                  CommandParameter="{Binding Parent.PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}"/>
+                        <Separator />
+                        <MenuItem Command="local:DCommand.Delete" 
+                                  CommandParameter="{Binding Parent.PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}"/>
+                    </ContextMenu>
+                    
+                    <Style x:Key="box1" BasedOn="{StaticResource item}" TargetType="ListBoxItem">
+                        <Setter Property="ToolTip" Value="{StaticResource tool}" />
+                        <EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick" />
+                        <EventSetter Event="MouseMove" Handler="ListBoxItem_MouseMove" />
+                        <EventSetter Event="QueryContinueDrag" Handler="ListBoxItem_QueryContinueDrag" />
+                        <EventSetter Event="GiveFeedback" Handler="ListBoxItem_GiveFeedback" />
+                        <EventSetter Event="MouseEnter" Handler="ListBoxItem_MouseEnter" />
+                        <EventSetter Event="MouseLeave" Handler="ListBoxItem_MouseLeave" />
+                        <Setter Property="ContextMenu" Value="{StaticResource menu}" />
+                    </Style>
+
+                    <Style x:Key="box2" BasedOn="{StaticResource item}" TargetType="ListBoxItem">
+                        <Setter Property="ToolTip" Value="{StaticResource tool}" />
+                        <Setter Property="ContextMenu" Value="{StaticResource menu1}" />
+                        <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListBoxItem_PreviewMouseLeftButtonDown" />
+                        <EventSetter Event="MouseEnter" Handler="ListBoxItem_MouseEnter" />
+                        <EventSetter Event="MouseLeave" Handler="ListBoxItem_MouseLeave" />
+                    </Style>
+
+                    <Style x:Key="listbox" TargetType="ListBox">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBox">
+                                    <Border BorderThickness="{TemplateBinding BorderThickness}"
+                                            BorderBrush="{TemplateBinding BorderBrush}" 
+                                            Background="{TemplateBinding Background}"
+                                            Margin="{TemplateBinding Margin}" CornerRadius="5"
+                                            Padding="{TemplateBinding Padding}">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*" />
+                                                <RowDefinition Height="auto" />
+                                            </Grid.RowDefinitions>
+                                            <ScrollViewer HorizontalScrollBarVisibility="Hidden"
+                                                          VerticalScrollBarVisibility="Visible">
+                                                <ItemsPresenter HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                                                            VerticalAlignment="{TemplateBinding VerticalAlignment}" />
+                                            </ScrollViewer>
+
+                                            <Button Grid.Row="1" Content="{StaticResource plus}" Width="20" Height="20"
+                                                    Style="{StaticResource Circle1}" Command="ApplicationCommands.Open" 
+                                                    VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,2,0,0"/>
+                                        </Grid>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+
+                    <local:LengthConverter x:Key="lc" Standard="50" />
+                    <local:Visibility2BooleanConverter x:Key="v2bc" />
+                    <Style x:Key="listbox1" TargetType="ListBox">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBox">
+                                    <Border BorderThickness="{TemplateBinding BorderThickness}"
+                                            BorderBrush="{TemplateBinding BorderBrush}" 
+                                            Background="{TemplateBinding Background}"
+                                            Margin="{TemplateBinding Margin}" CornerRadius="5"
+                                            Padding="{TemplateBinding Padding}"
+                                            FocusVisualStyle="{TemplateBinding FocusVisualStyle}">
+                                        <ScrollViewer FocusVisualStyle="{TemplateBinding FocusVisualStyle}">
+                                            <ItemsPresenter x:Name="PART_Content" HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                                                            VerticalAlignment="{TemplateBinding VerticalAlignment}" 
+                                                            FocusVisualStyle="{TemplateBinding FocusVisualStyle}"/>
+                                        </ScrollViewer>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Close" Executed="CMD_Close_Executed" />
+        <CommandBinding Command="ApplicationCommands.New" Executed="CMD_New_Executed" />
+        <CommandBinding Command="ApplicationCommands.Open" Executed="CMD_Open_Executed" />
+        
+        <CommandBinding Command="local:DCommand.Connect" CanExecute="CMD_Connect_CanExecute" Executed="CMD_Connect_Executed" />
+        <CommandBinding Command="local:DCommand.DisConnected" CanExecute="CMD_DisConnected_CanExecute" Executed="CMD_DisConnected_Executed" />
+        <CommandBinding Command="local:DCommand.Delete" Executed="CMD_Delete_Executed" />
+
+        <CommandBinding Command="local:DCommand.Shutdown" Executed="CMD_Shutdown_Executed" />
+        <CommandBinding Command="local:DCommand.Reboot" Executed="CMD_Reboot_Executed" />
+
+        <CommandBinding Command="local:DCommand.ModifyAlias" Executed="CMD_ModifyAlias_Executed" />
+        <CommandBinding Command="local:DCommand.Edit" CanExecute="CMD_Edit_CanExecute" Executed="CMD_Edit_Executed" />
+
+        <CommandBinding Command="local:DCommand.Max" CanExecute="CMD_Max_CanExecute" Executed="CMD_Max_Executed" />
+        <CommandBinding Command="local:DCommand.Center" CanExecute="CMD_Edit_CanExecute" Executed="CMD_Center_Executed" />
+
+        <CommandBinding Command="local:DCommand.CloseOther" Executed="CMD_CloseOther_Executed" />
+        <CommandBinding Command="local:DCommand.CloseAll" Executed="CMD_CloseAll_Executed" />
+    </Window.CommandBindings>
+    <Grid Name="MainPanel" Width="auto" Height="auto">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Menu Grid.Row="0" Name="Menu">
+            <MenuItem Header="程序(_P)">
+                <MenuItem Tag="参数配置" Header="参数配置(_C)" Click="MenuItem_Click" />
+                <Separator />
+                <MenuItem Tag="新建VNC桌面" Header="新建VNC桌面(_V)" Click="MenuItem_Click" />
+                <MenuItem Tag="新建RDP桌面" Header="新建RDP桌面(_R)" Click="MenuItem_Click" />
+                <Separator />
+                <MenuItem Tag="全屏" Header="全屏(_F)" Click="MenuItem_Click" InputGestureText="F11">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/EnterFullScreen.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <MenuItem Tag="设置保护" Header="设置保护(_Q)" Click="MenuItem_Click" />
+                <MenuItem Tag="锁定" Header="锁定(_L)" Click="MenuItem_Click" InputGestureText="Ctrl+L">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Lock.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <MenuItem Tag="保存" Header="保存(_S)" Click="MenuItem_Click">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Save.png" Stretch="Uniform" Height="16" Width="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <MenuItem Tag="退出" Header="退出(_E)" Click="MenuItem_Click">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Exit.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="帮助(_H)">
+                <MenuItem Tag="创建桌面快捷方式" Header="创建桌面快捷方式(_S)" Click="MenuItem_Click">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Shortcut.png" 
+                               Width="16" Height="16" Stretch="Uniform" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <MenuItem Tag="切换模式" Header="切换模式(_S)" Click="MenuItem_Click"
+                          InputGestureText="Shift+Tab">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Tab.png" 
+                               Width="16" Height="16" Stretch="Uniform" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <MenuItem Tag="检查更新" Header="检查更新(_U)" Click="MenuItem_Click">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Update.png" 
+                               Width="16" Height="16" Stretch="Uniform" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Tag="关于RemoteApp" Header="关于RemoteApp(_A)" Click="MenuItem_Click">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/About.png" 
+                               Width="16" Height="16" Stretch="Uniform" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+
+        <Grid Grid.Row="1" Name="MBorder">
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Border BorderThickness="1.5" BorderBrush="Gray" CornerRadius="10"
+                    Grid.Column="1" Grid.RowSpan="2" Margin="2,0,2,2">
+                <Grid>
+                    <Border Name="Single" Visibility="Collapsed" Margin="2">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+                            <Image Grid.Row="0" Grid.Column="0" Source="pack://application:,,,/Resources/Computer.png" Width="16" Height="16" 
+                                   HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            <TextBlock Grid.Row="0" Grid.Column="1" Height="16" Margin="5,0,0,0" >
+                                    <Hyperlink Command="local:DCommand.Edit" 
+                                               CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}">
+                                        <Run Text="{Binding RInfo.Alias}"/>
+                                    </Hyperlink>
+                            </TextBlock>
+                            <WrapPanel Grid.Row="0" Grid.Column="2">
+
+                            </WrapPanel>
+                            <WrapPanel Grid.Row="0" Grid.Column="3" HorizontalAlignment="Right" Margin="10,2,2,4">
+                                <Button Style="{StaticResource RotateCircle}" Command="local:DCommand.Center" 
+                                        CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}" 
+                                        Content="{StaticResource back}" local:ButtonBehavior.IsUseButtonAnimation="True"/>
+                            </WrapPanel>
+
+                            <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" 
+                                    BorderBrush="Gray" BorderThickness="1.2">
+                                <ContentPresenter Content="{Binding RInfo.EHost.Host}" />
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <ListBox Padding="0" BorderThickness="0" SelectionMode="Single"
+                             Name="ClientView" ItemContainerStyle="{StaticResource box}"
+                             ItemsSource="{Binding PInfos}" Margin="2" ScrollViewer.VerticalScrollBarVisibility="Visible"
+                             ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                             PreviewMouseDown="ClientView_PreviewMouseDown" FocusVisualStyle="{x:Null}"
+                             SelectionChanged="Selector_SelectionChanged" MouseMove="ClientView_MouseMove"
+                             Style="{StaticResource listbox1}">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}, Path=ActualWidth}" />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                    </ListBox>
+                    <TabControl Name="Tabs" BorderThickness="0" BorderBrush="Transparent" ItemContainerStyle="{StaticResource tabitem}"
+                                ScrollViewer.HorizontalScrollBarVisibility="Hidden" Template="{StaticResource OfficeTabControl}"
+                                SelectionChanged="Selector_SelectionChanged" ScrollViewer.VerticalScrollBarVisibility="Hidden" 
+                                FocusVisualStyle="{x:Null}"/>
+                </Grid>
+            </Border>
+
+            <GridSplitter Grid.Column="0" MouseEnter="GridSplitter_MouseEnter" Margin="0,2,0,2"
+                          Width="6" Background="Green" HorizontalAlignment="Stretch" Name="LeftSplitter">
+                <GridSplitter.Style>
+                    <Style TargetType="GridSplitter">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="GridSplitter">
+                                    <Grid Background="{TemplateBinding Background}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="auto" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <Border Grid.Row="0" Background="{TemplateBinding Background}" CornerRadius="3,3,0,0"/>
+                                        <Polygon Grid.Row="1" Stretch="Fill" Points="20,200 300,50 300,350" 
+                                            Stroke="BlueViolet" Fill="Red" Height="10" />
+
+                                        <Border Grid.Row="2" Background="{TemplateBinding Background}" CornerRadius="0,0,3,3" />
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </GridSplitter.Style>
+            </GridSplitter>
+        </Grid>
+
+        <Popup Name="ClientsPopup" Width="235" AllowsTransparency="True" IsOpen="False" StaysOpen="False"
+               Height="{Binding ElementName=MBorder, Path=ActualHeight}" PopupAnimation="Fade"
+               PlacementTarget="{Binding ElementName=MBorder}" Placement="Relative" >
+            <Border BorderThickness="2" BorderBrush="Green" Background="White" CornerRadius="0,10,10,0" 
+                    Grid.Row="1" Grid.Column="2">
+                <ListBox ItemsSource="{Binding RInfos}" Padding="1.5,0,0,0" BorderThickness="0"
+                         Name="Thumbnail" ContextMenuOpening="Thumbnail_ContextMenuOpening" 
+                         ItemContainerStyle="{StaticResource box1}" SelectionMode="Single" 
+                         ScrollViewer.VerticalScrollBarVisibility="Visible" AllowDrop="True"
+                         ScrollViewer.HorizontalScrollBarVisibility="Hidden" Margin="0,1,2,1"
+                         Drop="Thumbnail_Drop" DragLeave="Thumbnail_DragLeave" Background="White"
+                         Style="{StaticResource listbox}">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}, Path=ActualWidth}" />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Height="100">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <Image Source="{Binding RDPBitmap}" Height="80" Width="100" Margin="0,2,0,0" />
+                                <TextBlock Text="{Binding RInfo.Protocol}" Margin="15,7,0,0" Foreground="Red" FontWeight="Bold" FontStyle="Italic" />
+                                <!--<Border Grid.Row="0" Background="Red" HorizontalAlignment="Right" VerticalAlignment="Top"
+                                    BorderThickness="1" BorderBrush="Red" CornerRadius="10" MinWidth="16" Height="16"
+                                    Visibility="{Binding Count, Converter={StaticResource i2v}}">
+                                <TextBlock Text="{Binding Count}" Foreground="White" FontSize="12"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>-->
+
+
+                                <Grid Grid.Row="1" x:Name="label">
+                                    <TextBlock Visibility="{Binding Modify, Converter={StaticResource rvc}}" 
+                                               Text="{Binding RInfo.Alias}" VerticalAlignment="Center" 
+                                               MaxWidth="92" TextWrapping="Wrap" FontSize="11"
+                                               HorizontalAlignment="Center" Height="16" Margin="2,0,2,0"/>
+                                    <Popup IsOpen="{Binding Modify, UpdateSourceTrigger=PropertyChanged}" 
+                                           PlacementTarget="{Binding ElementName=label}" StaysOpen="False"
+                                           AllowsTransparency="True" Width="100" Placement="Bottom">
+                                        <Border BorderBrush="SkyBlue" BorderThickness="1" CornerRadius="3">
+                                            <TextBox KeyDown="TextBox_KeyDown" TextWrapping="Wrap" AcceptsTab="True" 
+                                                     Text="{Binding RInfo.Alias, UpdateSourceTrigger=PropertyChanged}" 
+                                                     SelectionLength="0" MaxWidth="98" LostFocus="TextBox_LostFocus"
+                                                     VerticalAlignment="Center" HorizontalContentAlignment="Center" />
+                                        </Border>
+                                    </Popup>
+                                </Grid>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Border>
+        </Popup>
+    </Grid>
+</Window>

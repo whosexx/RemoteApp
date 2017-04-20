@@ -1,0 +1,21 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:RemoteApp">
+
+    <Style TargetType="{x:Type local:ButtonShadowChrome}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:ButtonShadowChrome}">
+                    <Border SnapsToDevicePixels="True" BorderBrush="Green" Background="Red"
+                            BorderThickness="2" x:Name="Border" Height="40" Width="40"
+                            HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="10" Direction="0" ShadowDepth="20"
+                                              Color="{Binding ElementName=Border, Path=BorderBrush.Color}"/>
+                        </Border.Effect>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

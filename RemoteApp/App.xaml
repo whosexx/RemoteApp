@@ -1,0 +1,10 @@
+﻿<Application x:Class="RemoteApp.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:RemoteApp"
+             StartupUri="UI/MainWindow.xaml" DispatcherUnhandledException="Application_DispatcherUnhandledException"
+             SessionEnding="Application_SessionEnding">
+    <Application.Resources>
+         
+    </Application.Resources>
+</Application>
