@@ -109,6 +109,12 @@
                       IsChecked="{Binding SingleEnabled, UpdateSourceTrigger=Explicit}" Name="Single"
                       VerticalAlignment="Center" VerticalContentAlignment="Center"/>
             
+            <TextBlock Grid.Row="8" Grid.Column="0" TextAlignment="Right" Text="检查更新：" VerticalAlignment="Center" Foreground="Black" />
+            <CheckBox Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2" Margin="2" Content="(检查程序是否有更新)" Foreground="Green"
+                      IsChecked="{Binding IsCheckUpdate, UpdateSourceTrigger=Explicit}" Name="Update"
+                      VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+            
+            
             <Button Grid.Row="13" Grid.Column="1" Content="取消" Margin="20,4,20,0" IsCancel="True" />
             <Button Grid.Row="13" Grid.Column="2" Content="确定" Margin="20,4,20,0" IsDefault="True" Click="Button_Click" />
         </Grid>

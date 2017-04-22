@@ -121,6 +121,15 @@
     <Compile Include="UI\AboutBox.Designer.cs">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\EditTelnetClient.xaml.cs">
+      <DependentUpon>EditTelnetClient.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\EditSSHClient.xaml.cs">
+      <DependentUpon>EditSSHClient.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\EditVNCClient.xaml.cs">
+      <DependentUpon>EditVNCClient.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utils\ButtonBehavior.cs" />
     <Compile Include="Utils\Command.cs" />
     <Compile Include="UI\Crypto.xaml.cs">
@@ -129,8 +138,8 @@
     <Compile Include="UI\DConfig.xaml.cs">
       <DependentUpon>DConfig.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\EditClient.xaml.cs">
-      <DependentUpon>EditClient.xaml</DependentUpon>
+    <Compile Include="UI\EditRDPClient.xaml.cs">
+      <DependentUpon>EditRDPClient.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\GridLengthAnimation.cs" />
     <Compile Include="UI\SetCrypto.xaml.cs">
@@ -147,7 +156,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\EditClient.xaml">
+    <Page Include="UI\EditTelnetClient.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\EditSSHClient.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\EditVNCClient.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\EditRDPClient.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -320,6 +341,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Computer_Add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\New_Tab.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Protect.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

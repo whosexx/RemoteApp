@@ -103,6 +103,16 @@ namespace RemoteApp.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap Computer_Add {
+            get {
+                object obj = ResourceManager.GetObject("Computer_Add", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap Computer_Connecting {
             get {
                 object obj = ResourceManager.GetObject("Computer_Connecting", resourceCulture);
@@ -186,6 +196,26 @@ namespace RemoteApp.Properties {
         internal static System.Drawing.Bitmap Monitor {
             get {
                 object obj = ResourceManager.GetObject("Monitor", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap New_Tab {
+            get {
+                object obj = ResourceManager.GetObject("New_Tab", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap Protect {
+            get {
+                object obj = ResourceManager.GetObject("Protect", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -43,7 +43,7 @@ namespace RemoteApp
                                 <RowDefinition Height=""*"" />
                             </Grid.RowDefinitions >
                             <Image Source=""{Binding RDPBitmap}"" Height=""80"" Width=""100"" Margin=""0,2,0,0"" />
-                            <TextBlock Text=""{Binding RInfo.Protocol}"" Margin=""15,7,0,0"" Foreground=""Red"" FontWeight=""Bold"" FontStyle=""Italic"" />
+                            <TextBlock Text=""{Binding RInfo.Protocol}"" Margin=""15,7,0,0"" Foreground=""White"" FontWeight=""Bold"" FontStyle=""Italic"" />
                             <TextBlock Text=""{Binding RInfo.Alias}"" VerticalAlignment=""Top"" FontFamily=""微软雅黑""
                                        MaxWidth=""92"" TextWrapping=""Wrap"" Grid.Row=""1"" FontSize=""11""
                                        HorizontalAlignment=""Center"" Margin=""2,0,2,0"" />

@@ -28,12 +28,20 @@ namespace LibRDP
             this.ConsoleUI.IsInputEnabled = true;
             this.ConsoleUI.InternalRichTextBox.WordWrap = this.SInfo.AutoWrap;
             try { this.Encode = Encoding.GetEncoding(this.SInfo.Encode); }
-            catch { this.Encode = Encoding.UTF8; }
+            catch(Exception ef)
+            {
+                Logger.Error(ef.ToString());
+                this.Encode = Encoding.UTF8;
+            }
 
             this.SInfo.PropertyChangedRegister(nameof(this.SInfo.AutoWrap), PropertyChanged_Callback);
             this.SInfo.PropertyChangedRegister(nameof(this.SInfo.Encode), PropertyChanged_Callback);
 
-            this.Client = new Renci.SshNet.SshClient(sinfo.Ip, sinfo.Port, sinfo.User, Utils.DecryptChaCha20(sinfo.Password, RemoteInfo.Nonce, RemoteInfo.SHA256));
+            string pass = sinfo.Password;
+            if (!string.IsNullOrWhiteSpace(pass))
+                pass = Utils.DecryptChaCha20(sinfo.Password, RemoteInfo.Nonce, RemoteInfo.SHA256);
+
+            this.Client = new Renci.SshNet.SshClient(sinfo.Ip, sinfo.Port, sinfo.User, pass);
             this.Client.ErrorOccurred += this.Client_ErrorOccurred;
             this.Client.ConnectionInfo.Timeout = new TimeSpan(0, 0, 2);
             this.Client.ConnectionInfo.RetryAttempts = 2;
@@ -66,8 +74,6 @@ namespace LibRDP
                 this.ConsoleUI.ClearOutput(false);
 
             ShellSteam.Write(args.Content);
-            //if (args.Content.Trim() == "exit")
-            //    Task.Run(() => { this.Disconnect(); });
         }        
 
         public bool IsFullScreen => throw new NotImplementedException();

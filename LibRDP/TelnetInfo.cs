@@ -31,23 +31,6 @@ namespace LibRDP
 
     public class TelnetInfo : LibRDP.RemoteInfo
     {
-        //private string _encode = Encoding.UTF8.EncodingName;
-        //public string Encode
-        //{
-        //    get => string.IsNullOrWhiteSpace(this._encode) ? Encoding.UTF8.EncodingName : this._encode;
-        //    set
-        //    {
-        //        if (this._encode == value)
-        //            return;
-
-        //        if (string.IsNullOrWhiteSpace(value))
-        //            this._encode = Encoding.UTF8.EncodingName;
-        //        else
-        //            this._encode = value;
-        //        this.RaisedPropertyChanged(nameof(this.Encode));
-        //    }
-        //}
-
         private bool _autowrap = true;
         public bool AutoWrap
         {

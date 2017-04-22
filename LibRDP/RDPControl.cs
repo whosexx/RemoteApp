@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.Windows;
 
 namespace LibRDP
 {
@@ -109,13 +110,13 @@ namespace LibRDP
             rdpc.UserName = this.RInfo.User; //用户
             rdpc.FullScreen = this.RInfo.FullScreen;
 
-            if (this.RInfo.FullScreen || this.RInfo.DesktopHeight <= 0)
-                rdpc.DesktopHeight = SystemInformation.VirtualScreen.Height;
+            if (this.RInfo.DesktopHeight <= 0)
+                rdpc.DesktopHeight = (int)SystemParameters.PrimaryScreenHeight;
             else
                 rdpc.DesktopHeight = this.RInfo.DesktopHeight; ;
 
-            if (this.RInfo.FullScreen || this.RInfo.DesktopWidth <= 0)
-                rdpc.DesktopWidth = SystemInformation.VirtualScreen.Width;
+            if (this.RInfo.DesktopWidth <= 0)
+                rdpc.DesktopWidth = (int)SystemParameters.PrimaryScreenWidth;
             else
                 rdpc.DesktopWidth = this.RInfo.DesktopWidth;
 
@@ -136,7 +137,7 @@ namespace LibRDP
 
         private void Rdpc_OnWarning(object sender, AxMSTSCLib.IMsTscAxEvents_OnWarningEvent e)
         {
-            MessageBox.Show("Warning Code:" + this.rdpc.GetErrorDescription((uint)e.warningCode, 0));
+            System.Windows.Forms.MessageBox.Show("Warning Code:" + this.rdpc.GetErrorDescription((uint)e.warningCode, 0));
         }
 
         private void Rdpc_OnLoginComplete(object sender, EventArgs e)

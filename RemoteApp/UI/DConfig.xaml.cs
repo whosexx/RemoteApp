@@ -66,6 +66,10 @@ namespace RemoteApp.UI
             if (exp != null)
                 exp.UpdateSource();
 
+            exp = this.Update.GetBindingExpression(CheckBox.IsCheckedProperty);
+            if (exp != null)
+                exp.UpdateSource();
+
             bool max = false;
             if (Properties.Settings.Default.MaxWhenOpened != this.MaxOpen.IsChecked)
             {

@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using LibRDP;
+using System.Windows.Interop;
 
 namespace RemoteApp.UI
 {
@@ -327,6 +328,10 @@ namespace RemoteApp.UI
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            var values = Enum.GetValues(typeof(Protocol)).Cast<Protocol>().ToList();
+            values.Remove(Protocol.Empty);
+            this.RemoteC.ItemsSource = values;
+
             ProtocolMap.Register(Protocol.Empty, (typeof(EmptyInfo), typeof(List<EmptyInfo>)));
             this.Title = this.Title + " - " + System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
 
@@ -399,7 +404,8 @@ namespace RemoteApp.UI
                 while (true)
                 {
                     System.Threading.Thread.Sleep(1000 * 60);
-                    this.CheckUpdate("invoke");                    
+                    if (Properties.Settings.Default.IsCheckUpdate)
+                        this.CheckUpdate("invoke");                  
                 }
             });                       
 
@@ -480,7 +486,7 @@ namespace RemoteApp.UI
         }
 
         public void EnterAppFullScreen()
-        {
+        {           
             this.top = this.Top;
             this.left = this.Left;
             this.height = this.ActualHeight;
@@ -495,10 +501,13 @@ namespace RemoteApp.UI
             this.WindowStyle = WindowStyle.None;
             this.ResizeMode = ResizeMode.NoResize;
 
-            this.Top = 0;
-            this.Left = 0;
-            this.Width = SystemParameters.PrimaryScreenWidth;
-            this.Height = SystemParameters.PrimaryScreenHeight;
+            var IntPtrhwnd = new WindowInteropHelper(this).Handle;
+            var screen = System.Windows.Forms.Screen.FromHandle(IntPtrhwnd);
+
+            this.Top = screen.Bounds.Top;
+            this.Left = screen.Bounds.Left;
+            this.Width = screen.Bounds.Width;
+            this.Height = screen.Bounds.Height;
 
             this.IsFullScreen = true;
         }
@@ -562,6 +571,12 @@ namespace RemoteApp.UI
             //    return;
 
             //mi.Invoke(pop, null);
+        }
+
+        private void Window_Deactivated(object sender, EventArgs e)
+        {
+            if (this.ClientsPopup.IsOpen)
+                this.ClientsPopup.IsOpen = false;
         }
 
         public bool IsRealClose = false;
@@ -892,12 +907,7 @@ namespace RemoteApp.UI
             if (!(client is RemoteClient))
                 return;
 
-            EditClient edit = new EditClient(client.RInfo.Protocol, client)
-            {
-                ShowInTaskbar = false,
-                Owner = this,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner
-            };
+            var edit = this.GetClientUI(client.RInfo.Protocol, client);
             edit.ShowDialog();
         }        
 
@@ -1098,6 +1108,23 @@ namespace RemoteApp.UI
             
             switch((string)item.Tag)
             {
+                case "新建远程连接":
+                {
+                    var sub = e.OriginalSource as MenuItem;
+                    Protocol p = (Protocol)sub.DataContext;
+
+                    var client = this.GetClientUI(p, null);
+                    client.ShowDialog();
+                    break;
+                }
+                case "打开新的标签":
+                {
+                    RemoteClient client = new RemoteClient();
+                    EmptyInfo ef = new EmptyInfo(this.RInfos);
+                    client.RInfo = ef;
+                    this.OpenClient(client, this.Resources["box2"]);
+                    break;
+                }
                 case "全屏":
                 {
                     this.EnterAppFullScreen();
@@ -1164,33 +1191,7 @@ namespace RemoteApp.UI
                     config.AdjustResizeEvent += Config_AdjustResizeEvent;
                     config.ShowDialog();                    
                     break;
-                }
-                case "新建VNC桌面":
-                {
-                    EditClient client = new EditClient(Protocol.VNC)
-                    {
-                        Owner = this,
-                        ShowInTaskbar = false,
-                        WindowStartupLocation = WindowStartupLocation.CenterOwner
-                    };
-
-                    client.EditCompletedEvent += Client_EditCompletedEvent;
-                    client.ShowDialog();
-                    break;
-                }
-                case "新建RDP桌面":
-                {
-                    EditClient client = new EditClient(Protocol.RDP)
-                    {
-                        Owner = this,
-                        ShowInTaskbar = false,
-                        WindowStartupLocation = WindowStartupLocation.CenterOwner
-                    };
-
-                    client.EditCompletedEvent += Client_EditCompletedEvent;
-                    client.ShowDialog();
-                    break;
-                }
+                }                
                 case "退出":
                 {
                     this.IsRealClose = true;
@@ -1219,9 +1220,9 @@ namespace RemoteApp.UI
             this.SaveConfig();
         }
 
-        private void Client_EditCompletedEvent(RemoteClient remote, EditClient.EditMode mode)
+        private void Client_EditCompletedEvent(RemoteClient remote, EditMode mode)
         {
-            if(mode == EditClient.EditMode.新建)
+            if(mode == EditMode.新建)
             {
                 this.RInfos.Add(remote);
                 this.OpenClient(remote);
@@ -1603,7 +1604,58 @@ namespace RemoteApp.UI
                 if (client != null && Properties.Settings.Default.SingleEnabled)
                     client.RInfo.EHost.IsReadOnly = true;
             }
-        }        
+        }
+
+        public Window GetClientUI(Protocol protocol, RemoteClient client = null)
+        {
+            Window win = null;
+            switch (protocol)
+            {
+                case Protocol.RDP:
+                {
+                    var add = new EditRDPClient(client);
+                    if (client == null)
+                        add.EditCompletedEvent += Client_EditCompletedEvent;
+
+                    win = add;
+                    break;
+                }
+                case Protocol.SSH:
+                {
+                    var add = new EditSSHClient(client);
+                    if (client == null)
+                        add.EditCompletedEvent += Client_EditCompletedEvent;
+
+                    win = add;
+                    break;
+                }
+                case Protocol.TELNET:
+                {
+                    var add = new EditTelnetClient(client);
+                    if (client == null)
+                        add.EditCompletedEvent += Client_EditCompletedEvent;
+
+                    win = add;
+                    break;
+                }
+                case Protocol.VNC:
+                {
+                    var add = new EditVNCClient(client);
+                    if (client == null)
+                        add.EditCompletedEvent += Client_EditCompletedEvent;
+
+                    win = add;
+                    break;
+                }
+                default:
+                return null;
+            }
+
+            win.ShowInTaskbar = false;
+            win.Owner = this;
+            win.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            return win;
+        }
     }
 
     //拖拽模版

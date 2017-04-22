@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RemoteApp"
         mc:Ignorable="d"        
         Title="远程桌面监控" Height="900" Width="1500" 
-        Loaded="Window_Loaded" Closed="Window_Closed" 
+        Loaded="Window_Loaded" Closed="Window_Closed" Deactivated="Window_Deactivated"
         WindowStartupLocation="CenterScreen" Closing="Window_Closing" KeyDown="Window_KeyDown"
         LocationChanged="Window_LocationChanged" SizeChanged="Window_SizeChanged">
     <Window.Resources>
@@ -207,22 +207,44 @@
             <MenuItem Header="程序(_P)">
                 <MenuItem Tag="参数配置" Header="参数配置(_C)" Click="MenuItem_Click" />
                 <Separator />
-                <MenuItem Tag="新建VNC桌面" Header="新建VNC桌面(_V)" Click="MenuItem_Click" />
-                <MenuItem Tag="新建RDP桌面" Header="新建RDP桌面(_R)" Click="MenuItem_Click" />
-                <Separator />
+                <MenuItem Tag="新建远程连接" Header="新建远程连接(_V)" Click="MenuItem_Click" Name="RemoteC">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Computer_Add.png" Stretch="Uniform" Height="16" Width="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!--<MenuItem Tag="新建VNC桌面" Header="新建VNC桌面(_V)" Click="MenuItem_Click">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Computer_Add.png" Stretch="Uniform" Height="16" Width="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Tag="新建RDP桌面" Header="新建RDP桌面(_R)" Click="MenuItem_Click">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Computer_Add.png" Stretch="Uniform" Height="16" Width="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>-->
+                    <Separator />
                 <MenuItem Tag="全屏" Header="全屏(_F)" Click="MenuItem_Click" InputGestureText="F11">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/EnterFullScreen.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator />
-                <MenuItem Tag="设置保护" Header="设置保护(_Q)" Click="MenuItem_Click" />
+                <MenuItem Tag="设置保护" Header="设置保护(_Q)" Click="MenuItem_Click">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Protect.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Tag="锁定" Header="锁定(_L)" Click="MenuItem_Click" InputGestureText="Ctrl+L">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Lock.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator />
+                <MenuItem Tag="打开新的标签" Header="打开新的标签(_N)" Click="MenuItem_Click" >
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/New_Tab.png" Stretch="Uniform" Height="16" Width="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Tag="保存" Header="保存(_S)" Click="MenuItem_Click">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Save.png" Stretch="Uniform" Height="16" Width="16"/>
@@ -383,15 +405,8 @@
                                     <RowDefinition Height="auto"/>
                                 </Grid.RowDefinitions>
                                 <Image Source="{Binding RDPBitmap}" Height="80" Width="100" Margin="0,2,0,0" />
-                                <TextBlock Text="{Binding RInfo.Protocol}" Margin="15,7,0,0" Foreground="Red" FontWeight="Bold" FontStyle="Italic" />
-                                <!--<Border Grid.Row="0" Background="Red" HorizontalAlignment="Right" VerticalAlignment="Top"
-                                    BorderThickness="1" BorderBrush="Red" CornerRadius="10" MinWidth="16" Height="16"
-                                    Visibility="{Binding Count, Converter={StaticResource i2v}}">
-                                <TextBlock Text="{Binding Count}" Foreground="White" FontSize="12"
-                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>-->
-
-
+                                <TextBlock Text="{Binding RInfo.Protocol}" Margin="15,7,0,0" Foreground="White" FontWeight="Bold" FontStyle="Italic" />
+                                
                                 <Grid Grid.Row="1" x:Name="label">
                                     <TextBlock Visibility="{Binding Modify, Converter={StaticResource rvc}}" 
                                                Text="{Binding RInfo.Alias}" VerticalAlignment="Center" 

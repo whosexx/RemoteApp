@@ -34,17 +34,5 @@
     "Password": "",
     "IsViewOnly": false,
     "Memo": ""
-  },
-  {
-    "IsScale": true,
-    "UUID": "fc4a6d2d-a5ad-4ab3-b150-cdbf342153f1",
-    "Protocol": "VNC",
-    "Alias": "192.168.22.133",
-    "Ip": "192.168.22.133",
-    "Port": 5901,
-    "User": "",
-    "Password": "9ObH+90z",
-    "IsViewOnly": false,
-    "Memo": ""
   }
 ]
