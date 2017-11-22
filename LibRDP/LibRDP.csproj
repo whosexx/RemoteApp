@@ -44,7 +44,7 @@
   <ItemGroup>
     <Reference Include="ConsoleLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\bin\RemoteApp-x86\ConsoleLib.dll</HintPath>
+      <HintPath>$(Output)\ConsoleLib.dll</HintPath>
     </Reference>
     <Reference Include="LiteGuard, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\LiteGuard.1.1.0\lib\net35\LiteGuard.dll</HintPath>
@@ -63,7 +63,7 @@
     </Reference>
     <Reference Include="Sodium, Version=0.10.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\bin\RemoteApp-x86\Sodium.dll</HintPath>
+      <HintPath>$(Output)\Sodium.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -212,6 +212,9 @@
     <Content Include="License.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>AutoVersion $(ProjectDir)</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

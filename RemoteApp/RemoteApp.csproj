@@ -66,7 +66,7 @@
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\bin\RemoteApp-x86\Newtonsoft.Json.dll</HintPath>
+      <HintPath>$(Output)\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Renci.SshNet, Version=2016.0.0.0, Culture=neutral, PublicKeyToken=1cee9f8bde3db106, processorArchitecture=MSIL">
       <HintPath>..\packages\SSH.NET.2016.0.0\lib\net40\Renci.SshNet.dll</HintPath>
@@ -352,6 +352,9 @@
     <Resource Include="Resources\Protect.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>AutoVersion $(ProjectDir)</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
