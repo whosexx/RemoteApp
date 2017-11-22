@@ -52,7 +52,7 @@ namespace RemoteApp
 
         private const string Xaml2 = @"<ItemsPanelTemplate xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""
 	xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"">
-                        <UniformGrid Columns=""5"" VerticalAlignment=""Center"" HorizontalAlignment=""Center"" />
+                        <UniformGrid Columns=""8"" VerticalAlignment=""Center"" HorizontalAlignment=""Center"" />
                     </ItemsPanelTemplate>";
 
         public EmptyHost(ObservableCollection<RemoteClient> list = null) : base(null)
