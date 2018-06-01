@@ -1,4 +1,7 @@
-﻿namespace LibRDP
+﻿using AxMSTSCLib;
+using System.Windows.Forms;
+
+namespace LibRDP
 {
     partial class RDPControl
     {
@@ -30,7 +33,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RDPControl));
             this.TextLabel = new System.Windows.Forms.Label();
-            this.rdpc = new AxMSTSCLib.AxMsRdpClient7();
+            this.rdpc = new AxMSTSCLib.AxMsRdpClient7NotSafeForScripting();
             ((System.ComponentModel.ISupportInitialize)(this.rdpc)).BeginInit();
             this.SuspendLayout();
             // 
@@ -55,9 +58,9 @@
             this.rdpc.Name = "rdpc";
             this.rdpc.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("rdpc.OcxState")));
             this.rdpc.Size = new System.Drawing.Size(720, 576);
-            this.rdpc.TabIndex = 0;
+            this.rdpc.TabIndex = 2;
             // 
-            // RDPClient
+            // RDPControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -65,15 +68,15 @@
             this.BackColor = System.Drawing.Color.Black;
             this.Controls.Add(this.TextLabel);
             this.Controls.Add(this.rdpc);
-            this.Name = "RDPClient";
+            this.Name = "RDPControl";
             this.Size = new System.Drawing.Size(720, 576);
             ((System.ComponentModel.ISupportInitialize)(this.rdpc)).EndInit();
             this.ResumeLayout(false);
+
         }
 
         #endregion
-       
-        private AxMSTSCLib.AxMsRdpClient7 rdpc;
         private System.Windows.Forms.Label TextLabel;
+        private AxMsRdpClient7NotSafeForScripting rdpc;
     }
 }

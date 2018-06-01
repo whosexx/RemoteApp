@@ -134,6 +134,8 @@ namespace LibRDP
         //Local area network (LAN) (10 Mbps or higher)
         局域网 = 0x6,
 
+        自动检测 = 0x7
+
     }
 
     public enum ConnectedStatus
