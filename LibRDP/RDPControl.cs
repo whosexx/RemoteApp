@@ -19,16 +19,19 @@ namespace LibRDP
         public RDPInfo RInfo { get; set; }
         public event DisconnectEventHandler OnDisconnectedEvent;
 
-        private MsRdpClient7NotSafeForScripting Client { get; set; }
+        private MsRdpClient8NotSafeForScripting Client { get; set; }
 
+        private Version Version { get; set; }
         public RDPControl(RemoteInfo rinfo)
         {
             RDPInfo rdp = rinfo as RDPInfo;
-            this.RInfo = rdp ?? throw new ArgumentNullException("参数不能为空！！！");            
+            this.RInfo = rdp ?? throw new ArgumentNullException("参数不能为空！！！");
             InitializeComponent();
+            
+            this.Client = (MsRdpClient8NotSafeForScripting)this.rdpc.GetOcx();
+            this.Version = new Version(this.Client.Version);
 
             CheckForIllegalCrossThreadCalls = false;
-            this.Client = (MsRdpClient7NotSafeForScripting)this.rdpc.GetOcx();
         }
 
         public void SetTag(object tag)
@@ -44,6 +47,7 @@ namespace LibRDP
             this.TextLabel.Visible = true;
             this.TextLabel.Text = "正在连接中，请稍候……";
 
+            //this.Version = new Version(this.Client.Version);
             //rdpc.RemoteProgram.RemoteProgramMode = true;
             //'Set keyboard hook mode to "Always hook" - only works on XP.
             //keyboardhook: i
@@ -58,7 +62,9 @@ namespace LibRDP
             //0   在客户端计算机上播放声音。
             //1   在主计算机上播放声音。
             //2   不播放声音。
-            Client.SecuredSettings2.AudioRedirectionMode = 0;            
+            Client.SecuredSettings2.AudioRedirectionMode = 0;
+
+            //Client.ColorDepth = 16;
 
             string pass = Utils.DecryptChaCha20(this.RInfo.Password, RemoteInfo.Nonce, RemoteInfo.SHA256);
             if (!string.IsNullOrWhiteSpace(this.RInfo.Password) && !string.IsNullOrWhiteSpace(pass))
@@ -67,14 +73,14 @@ namespace LibRDP
             //Client.AdvancedSettings8.allowBackgroundInput = 0;
             Client.AdvancedSettings2.RDPPort = this.RInfo.Port;
             //映射磁盘
-            Client.AdvancedSettings2.RedirectDrives = true;
+            Client.AdvancedSettings2.RedirectDrives = false;
             Client.AdvancedSettings2.RedirectPrinters = false;
-            Client.AdvancedSettings2.RedirectSmartCards = false;            
+            Client.AdvancedSettings2.RedirectSmartCards = false;
+            Client.AdvancedSettings2.RedirectPorts = false;
 
             //指定是否允许位图缓冲
             //0 - 不允许
             //1 - 允许
-            Client.AdvancedSettings2.BitmapPersistence = 1;
             Client.AdvancedSettings2.PerformanceFlags = (int)(PerformanceFlags.TS_PERF_ENABLE_DESKTOP_COMPOSITION 
                 | PerformanceFlags.TS_PERF_ENABLE_ENHANCED_GRAPHICS 
                 | PerformanceFlags.TS_PERF_ENABLE_FONT_SMOOTHING);
@@ -85,24 +91,31 @@ namespace LibRDP
             Client.AdvancedSettings2.EnableMouse = 1;
             Client.AdvancedSettings2.SmartSizing = true;
 
-            Client.AdvancedSettings2.singleConnectionTimeout = 30;
-            Client.AdvancedSettings2.shutdownTimeout = 30;
-            Client.AdvancedSettings2.overallConnectionTimeout = 30;
-            Client.AdvancedSettings2.MinutesToIdleTimeout = 30;
-            Client.AdvancedSettings2.keepAliveInterval = 30;
-            Client.AdvancedSettings2.GrabFocusOnConnect = true;
-            Client.AdvancedSettings3.EnableAutoReconnect = true;
+            //Client.AdvancedSettings2.singleConnectionTimeout = 30;
+            //Client.AdvancedSettings2.shutdownTimeout = 30;
+            Client.AdvancedSettings2.overallConnectionTimeout = 20;
+            Client.AdvancedSettings2.MinutesToIdleTimeout = 0;
+            Client.AdvancedSettings2.keepAliveInterval = 60000;//in milliseconds (10,000 = 10 seconds)
+            Client.AdvancedSettings2.GrabFocusOnConnect = true;            
             //Client.AdvancedSettings8.DisplayConnectionBar = true;
             Client.AdvancedSettings2.EnableWindowsKey = 1;
-            Client.AdvancedSettings2.Compress = 1;
+            //Client.AdvancedSettings2.Compress = 1;
+            Client.AdvancedSettings2.EncryptionEnabled = 1;
+
             //Client.AdvancedSettings8.ConnectToAdministerServer = false;
             //Client.AdvancedSettings8.LoadBalanceInfo = "false";
 
+            if (this.Version >= Versions.RDC61)
+            {
+                Client.AdvancedSettings7.EnableCredSspSupport = this.RInfo.EnableCredSspSupport;
+                Client.AdvancedSettings8.AudioQualityMode = 0;
+            }
+
             try
             {
-                //Client.AdvancedSettings8.allowBackgroundInput = 0;
-                Client.AdvancedSettings2.EncryptionEnabled = 1;
+                //Client.AdvancedSettings8.allowBackgroundInput = 0;                
                 Client.AdvancedSettings3.MaxReconnectAttempts = 5;
+                Client.AdvancedSettings3.EnableAutoReconnect = true;
 
                 //取消全屏最小化按钮                
                 Client.AdvancedSettings4.ConnectionBarShowMinimizeButton = false;
@@ -122,7 +135,7 @@ namespace LibRDP
             }
             catch { }
 
-            //Client.Domain = Environment.UserDomainName;
+            Client.Domain = Environment.UserDomainName;
             Client.Server = this.RInfo.Ip; //远程桌面的IP地址或者域名
             Client.UserName = this.RInfo.User; //用户
             Client.FullScreen = this.RInfo.FullScreen;
@@ -140,19 +153,26 @@ namespace LibRDP
                 Client.DesktopWidth = this.RInfo.DesktopWidth;
 
             Client.ColorDepth = (int)this.RInfo.ColorDepth;
-
-            Client.OnDisconnected += Rdpc_OnDisconnected;
+            
             Client.OnConnected += Rdpc_OnConnected;
             Client.OnConnecting += Rdpc_OnConnecting;
 
+            Client.OnLoginComplete += Rdpc_OnLoginComplete;
             Client.OnFatalError += Rdpc_OnFatalError;
 
+            Client.OnDisconnected += Rdpc_OnDisconnected;
             Client.OnLeaveFullScreenMode += Rdpc_OnLeaveFullScreenMode;
-            Client.OnLoginComplete += Rdpc_OnLoginComplete;
-            this.Client.OnLogonError += Rdpc_OnLogonError;
+
+            Client.OnIdleTimeoutNotification += Client_OnIdleTimeoutNotification;
+            Client.OnLogonError += Rdpc_OnLogonError;
             //Client.OnWarning += Rdpc_OnWarning;
 
             Client.Connect();
+        }
+
+        private void Client_OnIdleTimeoutNotification()
+        {
+            
         }
 
         private void Rdpc_OnLogonError(int lError)
@@ -165,7 +185,7 @@ namespace LibRDP
             System.Windows.Forms.MessageBox.Show("Rdpc_OnFatalError: " + errorCode.ToString());
         }
 
-        private void Rdpc_OnWarning(object sender, AxMSTSCLib.IMsTscAxEvents_OnWarningEvent e)
+        private void Rdpc_OnWarning(object sender, IMsTscAxEvents_OnWarningEvent e)
         {
             System.Windows.Forms.MessageBox.Show("Warning Code:" + this.Client.GetErrorDescription((uint)e.warningCode, 0));
         }
@@ -214,8 +234,7 @@ namespace LibRDP
                 return;
             }
 
-            var msg = this.Client.GetErrorDescription((uint)discReason, 0);
-            this.OnDisconnectedEvent?.Invoke(this.RInfo, new DisconnectEventArgs(discReason, msg));
+            this.OnDisconnectedEvent?.Invoke(this.RInfo, new DisconnectEventArgs(discReason, this.Client.GetErrorDescription((uint)discReason, 0)));
         }
 
         public void Disconnect()

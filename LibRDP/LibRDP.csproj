@@ -170,7 +170,6 @@
       <Lcid>0</Lcid>
       <WrapperTool>aximp</WrapperTool>
       <Isolated>False</Isolated>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
     </COMReference>
     <COMReference Include="AxRDPCOMAPILib">
       <Guid>{CC802D05-AE07-4C15-B496-DB9D22AA0A84}</Guid>
@@ -187,7 +186,6 @@
       <Lcid>0</Lcid>
       <WrapperTool>tlbimp</WrapperTool>
       <Isolated>False</Isolated>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
     </COMReference>
     <COMReference Include="RDPCOMAPILib">
       <Guid>{CC802D05-AE07-4C15-B496-DB9D22AA0A84}</Guid>

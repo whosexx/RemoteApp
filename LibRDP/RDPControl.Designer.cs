@@ -33,7 +33,7 @@ namespace LibRDP
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RDPControl));
             this.TextLabel = new System.Windows.Forms.Label();
-            this.rdpc = new AxMSTSCLib.AxMsRdpClient7NotSafeForScripting();
+            this.rdpc = new AxMSTSCLib.AxMsRdpClient8NotSafeForScripting();
             ((System.ComponentModel.ISupportInitialize)(this.rdpc)).BeginInit();
             this.SuspendLayout();
             // 
@@ -77,6 +77,6 @@ namespace LibRDP
 
         #endregion
         private System.Windows.Forms.Label TextLabel;
-        private AxMsRdpClient7NotSafeForScripting rdpc;
+        private AxMsRdpClient8NotSafeForScripting rdpc;
     }
 }
