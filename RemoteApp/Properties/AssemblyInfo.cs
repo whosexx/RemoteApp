@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("远程桌面监控系统")]
 [assembly: AssemblyDescription("远程控制和监控多台电脑的运行状态")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("北京中传数广技术有限公司")]
+[assembly: AssemblyCompany("DarkV")]
 [assembly: AssemblyProduct("远程桌面监控系统")]
-[assembly: AssemblyCopyright("Copyright © ChinaEPG 2016")]
+[assembly: AssemblyCopyright("Copyright © DarkV 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -51,5 +51,5 @@ using System.Windows;
 //可以指定所有这些值，也可以使用“生成号”和“修订号”的默认值，
 // 方法是按如下所示使用“*”: :
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.1.0.7")]
-[assembly: AssemblyFileVersion("2.1.1.36")]
+[assembly: AssemblyVersion("2.1.0")]
+[assembly: AssemblyFileVersion("2.1.2")]
