@@ -49,7 +49,7 @@ namespace RemoteApp.UI
             if (this.Client != null)
             {
                 this.RDP.DataContext = this.Client;
-                this.Password.Password = Utils.DecryptChaCha20(this.Client.RInfo.Password, Properties.Settings.Default.Nonce, Properties.Settings.Default.SHA256);
+                this.Password.Password = LibRDP.Utils.DecryptChaCha20(this.Client.RInfo.Password, Properties.Settings.Default.Nonce, Properties.Settings.Default.SHA256);
                 
                 this.Btn.Content = "修改";
                 this.Window.Header = "修改" + Protocol.RDP + "桌面参数";
@@ -73,7 +73,7 @@ namespace RemoteApp.UI
             if (c == null)
                 return;
 
-            c.RInfo.Password = Utils.EncryptChaCha20(this.Password.Password, Properties.Settings.Default.Nonce, Properties.Settings.Default.SHA256);
+            c.RInfo.Password = LibRDP.Utils.EncryptChaCha20(this.Password.Password, Properties.Settings.Default.Nonce, Properties.Settings.Default.SHA256);
             this.EditCompletedEvent?.Invoke(c, mode);
             this.Close();
         }

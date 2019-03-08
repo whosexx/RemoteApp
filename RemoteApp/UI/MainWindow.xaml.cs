@@ -361,7 +361,7 @@ namespace RemoteApp.UI
                     if (string.IsNullOrWhiteSpace(r.RInfo.Password))
                         continue;
 
-                    var p = Utils.DecryptChaCha20(r.RInfo.Password, Properties.Settings.Default.Nonce, Properties.Settings.Default.SHA256);
+                    var p = LibRDP.Utils.DecryptChaCha20(r.RInfo.Password, Properties.Settings.Default.Nonce, Properties.Settings.Default.SHA256);
                     if (string.IsNullOrWhiteSpace(p) || p.FirstOrDefault(m => (uint)m < 33 || (uint)m > 126) > 0)
                         r.RInfo.Password = string.Empty;
                 }
@@ -1209,11 +1209,11 @@ namespace RemoteApp.UI
                 if (string.IsNullOrWhiteSpace(r.RInfo.Password))
                     continue;
 
-                var p = Utils.DecryptChaCha20(r.RInfo.Password, Properties.Settings.Default.Nonce, RemoteInfo.SHA256);
+                var p = LibRDP.Utils.DecryptChaCha20(r.RInfo.Password, Properties.Settings.Default.Nonce, RemoteInfo.SHA256);
                 if (p == null)
                     r.RInfo.Password = string.Empty;
                 else
-                    r.RInfo.Password = Utils.EncryptChaCha20(p, Properties.Settings.Default.Nonce, Properties.Settings.Default.SHA256);
+                    r.RInfo.Password = LibRDP.Utils.EncryptChaCha20(p, Properties.Settings.Default.Nonce, Properties.Settings.Default.SHA256);
             }
             //更新密码保护
             RemoteInfo.SHA256 = Properties.Settings.Default.SHA256;

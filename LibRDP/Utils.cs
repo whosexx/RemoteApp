@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace LibRDP
 {
-    class Utils
+    public class Utils
     {
         [System.Runtime.InteropServices.DllImport("user32.dll ")]
         public static extern int SetWindowLong(IntPtr hWnd, int nIndex, int wndproc);
@@ -64,7 +64,7 @@ namespace LibRDP
             }
         }
 
-        internal static string EncryptChaCha20(string msg, string nonce, string key)
+        public static string EncryptChaCha20(string msg, string nonce, string key)
         {
             if (string.IsNullOrWhiteSpace(key) || nonce.Length != 8)
                 return string.Empty;
@@ -76,7 +76,7 @@ namespace LibRDP
             return Convert.ToBase64String(bs);
         }
 
-        internal static string DecryptChaCha20(string msg, string nonce, string key)
+        public static string DecryptChaCha20(string msg, string nonce, string key)
         {
             if (string.IsNullOrWhiteSpace(key) || nonce.Length != 8)
                 return string.Empty;

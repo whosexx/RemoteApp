@@ -116,13 +116,13 @@ namespace RemoteApp
             return parent;
         }
 
-        public static byte[] GetRandomArray(int size)
-        {
-            if (size <= 0)
-                return null;
+        //public static byte[] GetRandomArray(int size)
+        //{
+        //    if (size <= 0)
+        //        return null;
 
-            return Sodium.SodiumCore.GetRandomBytes(size);
-        }
+        //    return Sodium.SodiumCore.GetRandomBytes(size);
+        //}
 
         public static string CalcSHA256(string value)
         {
@@ -160,30 +160,30 @@ namespace RemoteApp
             }
         }
 
-        internal static string EncryptChaCha20(string msg, string nonce, string key)
-        {
-            if (string.IsNullOrWhiteSpace(key) || nonce.Length != 8)
-                return string.Empty;
+        //internal static string EncryptChaCha20(string msg, string nonce, string key)
+        //{
+        //    if (string.IsNullOrWhiteSpace(key) || nonce.Length != 8)
+        //        return string.Empty;
 
-            var n = Encoding.UTF8.GetBytes(nonce);
-            var s = Convert.FromBase64String(key);
-            var cliper = Encoding.UTF8.GetBytes(msg);
-            var bs = Sodium.StreamEncryption.EncryptChaCha20(cliper, n, s);
-            return Convert.ToBase64String(bs);
-        }
+        //    var n = Encoding.UTF8.GetBytes(nonce);
+        //    var s = Convert.FromBase64String(key);
+        //    var cliper = Encoding.UTF8.GetBytes(msg);
+        //    var bs = Sodium.StreamEncryption.EncryptChaCha20(cliper, n, s);
+        //    return Convert.ToBase64String(bs);
+        //}
 
-        internal static string DecryptChaCha20(string msg, string nonce, string key)
-        {
-            if (string.IsNullOrWhiteSpace(key) || nonce.Length != 8)
-                return string.Empty;
+        //internal static string DecryptChaCha20(string msg, string nonce, string key)
+        //{
+        //    if (string.IsNullOrWhiteSpace(key) || nonce.Length != 8)
+        //        return string.Empty;
 
-            var b = Convert.FromBase64String(msg);
-            var n = Encoding.UTF8.GetBytes(nonce);
-            var s = Convert.FromBase64String(key);
+        //    var b = Convert.FromBase64String(msg);
+        //    var n = Encoding.UTF8.GetBytes(nonce);
+        //    var s = Convert.FromBase64String(key);
 
-            var bs = Sodium.StreamEncryption.DecryptChaCha20(b, n, s);
-            return Encoding.UTF8.GetString(bs);
-        }
+        //    var bs = Sodium.StreamEncryption.DecryptChaCha20(b, n, s);
+        //    return Encoding.UTF8.GetString(bs);
+        //}
 
         //internal static string AES_Encrypt(string toEncrypt, string salt = "")
         //{
