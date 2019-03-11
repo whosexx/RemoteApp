@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RemoteApp"
         mc:Ignorable="d"        
-        Title="远程桌面监控" Height="900" Width="1500" 
+        Title="远程桌面监控" Height="900" Width="1500" WindowState="Maximized"
         Loaded="Window_Loaded" Closed="Window_Closed" Deactivated="Window_Deactivated"
         WindowStartupLocation="CenterScreen" Closing="Window_Closing" KeyDown="Window_KeyDown"
         LocationChanged="Window_LocationChanged" SizeChanged="Window_SizeChanged">
