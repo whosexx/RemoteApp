@@ -12,21 +12,70 @@ namespace LibRDP
 {
     public class Utils
     {
-        [System.Runtime.InteropServices.DllImport("user32.dll ")]
-        public static extern int SetWindowLong(IntPtr hWnd, int nIndex, int wndproc);
-        [System.Runtime.InteropServices.DllImport("user32.dll ")]
-        public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+        
 
-        public const int GWL_STYLE = -16;
-        public const int WS_DISABLED = 0x8000000;
+        //public const int GWL_STYLE = -16;
+        //public const int WS_DISABLED = 0x8000000;
 
-        public static void SetControlEnabled(Control c, bool enabled)
-        {
-            if (enabled)
-            { SetWindowLong(c.Handle, GWL_STYLE, (~WS_DISABLED) & GetWindowLong(c.Handle, GWL_STYLE)); }
-            else
-            { SetWindowLong(c.Handle, GWL_STYLE, WS_DISABLED | GetWindowLong(c.Handle, GWL_STYLE)); }
-        }
+
+
+        
+
+
+        ////public const int SWP_NOOWNERZORDER = 0x200;
+        ////public const int SWP_NOREDRAW = 0x8;
+        ////public const int SWP_NOZORDER = 0x4;
+        ////public const int SWP_SHOWWINDOW = 0x0040;
+        ////public const int WS_EX_MDICHILD = 0x40;
+        ////public const int SWP_NOACTIVATE = 0x10;
+        ////public const int SWP_ASYNCWINDOWPOS = 0x4000;
+        ////public const int SWP_NOMOVE = 0x2;
+        ////public const int SWP_NOSIZE = 0x1;
+        ////public const int WM_CLOSE = 0x10;
+
+        //public const int SW_HIDE = 0; //{隐藏, 并且任务栏也没有最小化图标}
+        //public const int SW_SHOWNORMAL = 1; //{用最近的大小和位置显示, 激活}
+        //public const int SW_NORMAL = 1; //{同 SW_SHOWNORMAL}
+        //public const int SW_SHOWMINIMIZED = 2; //{最小化, 激活}
+        //public const int SW_SHOWMAXIMIZED = 3; //{最大化, 激活}
+        //public const int SW_MAXIMIZE = 3; //{同 SW_SHOWMAXIMIZED}
+        //public const int SW_SHOWNOACTIVATE = 4; //{用最近的大小和位置显示, 不激活}
+        //public const int SW_SHOW = 5; //{同 SW_SHOWNORMAL}
+        //public const int SW_MINIMIZE = 6; //{最小化, 不激活}
+        //public const int SW_SHOWMINNOACTIVE = 7; //{同 SW_MINIMIZE}
+        //public const int SW_SHOWNA = 8; //{同 SW_SHOWNOACTIVATE}
+        //public const int SW_RESTORE = 9; //{同 SW_SHOWNORMAL}
+        //public const int SW_SHOWDEFAULT = 10; //{同 SW_SHOWNORMAL}
+        //public const int SW_MAX = 10; //{同 SW_SHOWNORMAL}
+        ////public const int WS_BORDER = 0x00800000;
+        //public const int WS_CAPTION = 0x00C00000;
+        ////const int PROCESS_ALL_ACCESS = 0x1F0FFF;
+        ////const int PROCESS_VM_READ = 0x0010;
+        ////const int PROCESS_VM_WRITE = 0x0020;     
+
+        //internal const int
+        //    GWL_WNDPROC = (-4),
+        //    GWL_HINSTANCE = (-6),
+        //    GWL_HWNDPARENT = (-8),
+        //    GWL_STYLE = (-16),
+        //    GWL_EXSTYLE = (-20),
+        //    GWL_USERDATA = (-21),
+        //    GWL_ID = (-12);
+        //internal const int
+        //      WS_CHILD = 0x40000000,
+        //      WS_VISIBLE = 0x10000000,
+        //      LBS_NOTIFY = 0x00000001,
+        //      HOST_ID = 0x00000002,
+        //      LISTBOX_ID = 0x00000001,
+        //      WS_VSCROLL = 0x00200000,
+        //      WS_BORDER = 0x00800000;
+
+
+
+
+
+
+        
 
         public static string CalcSHA256(string value)
         {
@@ -34,16 +83,6 @@ namespace LibRDP
                 return null;
 
             byte[] retval = Encoding.UTF8.GetBytes(value);
-            //using (MD5 md5 = new MD5CryptoServiceProvider())
-            //using (SHA256 sha256 = new SHA256CryptoServiceProvider())
-            //{
-            //    retval = sha256.ComputeHash(retval);
-
-            //    if (retval == null)
-            //        return null;
-
-            //    return Convert.ToBase64String(CalcSHA256(retval));
-            //}
             return Convert.ToBase64String(CalcSHA256(retval));
         }
 
@@ -51,8 +90,7 @@ namespace LibRDP
         {
             if (value == null)
                 return null;
-
-            //using (MD5 md5 = new MD5CryptoServiceProvider())
+            
             using (SHA256 sha256 = new SHA256CryptoServiceProvider())
             {
                 value = sha256.ComputeHash(value);
@@ -88,187 +126,5 @@ namespace LibRDP
             var bs = Sodium.StreamEncryption.DecryptChaCha20(b, n, s);
             return Encoding.UTF8.GetString(bs);
         }
-
-        //internal static string AES_Encrypt(string toEncrypt, string salt = "")
-        //{
-        //    if (string.IsNullOrWhiteSpace(salt))
-        //        salt = "88888888";
-
-        //    byte[] keyArray = Encoding.UTF8.GetBytes(salt);
-        //    if (keyArray.Length > 24)
-        //        throw new ArgumentException("长度不符合要求");
-
-        //    byte[] key = new byte[32];
-        //    byte[] rand = new byte[key.Length - keyArray.Length];
-        //    new Random().NextBytes(rand);
-        //    Buffer.BlockCopy(keyArray, 0, key, 0, keyArray.Length);
-        //    Buffer.BlockCopy(rand, 0, key, keyArray.Length, rand.Length);
-
-        //    byte[] toEncryptArray = Encoding.UTF8.GetBytes(toEncrypt);
-        //    using (RijndaelManaged rDel = new RijndaelManaged())
-        //    {
-        //        rDel.Key = key;
-        //        rDel.Mode = CipherMode.ECB;
-        //        rDel.Padding = PaddingMode.PKCS7;
-
-        //        using (ICryptoTransform cTransform = rDel.CreateEncryptor())
-        //        {
-        //            byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
-
-        //            int total = 0;
-        //            Array.Reverse(rand);
-        //            rand = Encrypt(rand);
-        //            Array.Reverse(rand);
-
-        //            byte l = (byte)rand.Length;
-        //            var encpt = resultArray.ToArray();
-        //            byte[] seedstr = new byte[rand.Length + 1 + encpt.Length];
-
-        //            Buffer.BlockCopy(encpt, 0, seedstr, 0, encpt.Length);
-        //            total += encpt.Length;
-
-        //            Buffer.BlockCopy(rand, 0, seedstr, total, rand.Length);
-        //            total += rand.Length;
-
-        //            seedstr[total] = l;
-
-        //            return Convert.ToBase64String(seedstr, 0, seedstr.Length);
-        //        }
-        //    }
-        //}
-
-        //internal static string AES_Decrypt(string pass, string salt = "")
-        //{
-        //    if (string.IsNullOrWhiteSpace(pass))
-        //        return string.Empty;
-
-        //    if (string.IsNullOrWhiteSpace(salt))
-        //        salt = "88888888";
-
-        //    byte[] keyArray = Encoding.UTF8.GetBytes(salt);
-        //    if (keyArray.Length > 24)
-        //        throw new ArgumentException("长度不符合要求");
-
-        //    byte[] input = Convert.FromBase64String(pass);
-        //    int total = input.Length;
-        //    byte len = input[total - 1];
-        //    if (len >= (total - 1))
-        //        return null;
-
-        //    byte[] key = new byte[len];
-        //    Buffer.BlockCopy(input, total - len - 1, key, 0, len);
-
-        //    Array.Reverse(key);
-        //    key = Decrypt(key);
-        //    Array.Reverse(key);
-        //    if ((key.Length + keyArray.Length) != 32)
-        //        return null;
-
-        //    byte[] seed = new byte[32];
-        //    Buffer.BlockCopy(keyArray, 0, seed, 0, keyArray.Length);
-        //    Buffer.BlockCopy(key, 0, seed, keyArray.Length, key.Length);
-
-        //    using (RijndaelManaged rDel = new RijndaelManaged())
-        //    {
-        //        rDel.Key = seed;
-        //        rDel.Mode = CipherMode.ECB;
-        //        rDel.Padding = PaddingMode.PKCS7;
-
-        //        using (ICryptoTransform cTransform = rDel.CreateDecryptor())
-        //        {
-        //            byte[] resultArray = cTransform.TransformFinalBlock(input, 0, total - len - 1);
-        //            return UTF8Encoding.UTF8.GetString(resultArray);
-        //        }
-        //    }
-        //}
-
-        ///// <summary>
-        ///// 加密
-        ///// </summary>
-        ///// <param name="pass"></param>
-        ///// <returns></returns>
-        //internal static string Encrypt(string pass)
-        //{
-        //    byte[] rgbkey = { 0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF };
-        //    byte[] rgbIV = { 0xE2, 0x35, 0xC4, 0x6F, 0x30, 0xAB, 0xB6, 0xA2 };
-
-        //    byte[] inputByteArray = Encoding.UTF8.GetBytes(pass);
-        //    inputByteArray = Encrypt(inputByteArray);
-        //    return Convert.ToBase64String(inputByteArray);
-        //}
-
-        //internal static byte[] Encrypt(byte[] pass)
-        //{
-        //    byte[] rgbkey = { 0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF };
-        //    byte[] rgbIV = { 0xE2, 0x35, 0xC4, 0x6F, 0x30, 0xAB, 0xB6, 0xA2 };
-
-        //    using (DESCryptoServiceProvider dCSP = new DESCryptoServiceProvider())
-        //    {
-        //        using (MemoryStream mStream = new MemoryStream())
-        //        {
-        //            using (CryptoStream cStream = new CryptoStream(mStream, dCSP.CreateEncryptor(rgbkey, rgbIV), CryptoStreamMode.Write))
-        //            {
-        //                cStream.Write(pass, 0, pass.Length);
-        //                cStream.FlushFinalBlock();
-
-        //                return mStream.ToArray();
-        //            }
-        //        }
-        //    }
-        //}
-
-        ///// <summary>
-        ///// 解密
-        ///// </summary>
-        ///// <param name="pass"></param>
-        ///// <returns></returns>
-        //internal static string Decrypt(string pass)
-        //{
-        //    if (string.IsNullOrWhiteSpace(pass))
-        //        return null;
-
-        //    byte[] rgbkey = { 0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF };
-        //    byte[] rgbIV = { 0xE2, 0x35, 0xC4, 0x6F, 0x30, 0xAB, 0xB6, 0xA2 };
-
-        //    try
-        //    {
-        //        byte[] input = Convert.FromBase64String(pass);
-        //        input = Decrypt(input);
-        //        return Encoding.UTF8.GetString(input.ToArray());
-        //    }
-        //    catch
-        //    {
-        //        return null;
-        //    }
-        //}
-
-        //internal static byte[] Decrypt(byte[] pass)
-        //{
-        //    if (pass == null || pass.Length <= 0)
-        //        return null;
-
-        //    byte[] rgbkey = { 0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF };
-        //    byte[] rgbIV = { 0xE2, 0x35, 0xC4, 0x6F, 0x30, 0xAB, 0xB6, 0xA2 };
-
-        //    try
-        //    {
-        //        using (DESCryptoServiceProvider DCSP = new DESCryptoServiceProvider())
-        //        {
-        //            using (MemoryStream mStream = new MemoryStream())
-        //            {
-        //                using (CryptoStream cStream = new CryptoStream(mStream, DCSP.CreateDecryptor(rgbkey, rgbIV), CryptoStreamMode.Write))
-        //                {
-        //                    cStream.Write(pass, 0, pass.Length);
-        //                    cStream.FlushFinalBlock();
-        //                    return mStream.ToArray();
-        //                }
-        //            }
-        //        }
-        //    }
-        //    catch
-        //    {
-        //        return null;
-        //    }
-        //}
     }
 }

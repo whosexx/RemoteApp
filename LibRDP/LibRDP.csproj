@@ -18,20 +18,11 @@
     <OutputPath>bin\Debug\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LiteGuard, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\LiteGuard.2.2.0\lib\netstandard1.0\LiteGuard.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="PrimS.Telnet, Version=0.8.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Telnet.0.8.3\lib\net45\PrimS.Telnet.dll</HintPath>
-    </Reference>
-    <Reference Include="Renci.SshNet, Version=2016.1.0.0, Culture=neutral, PublicKeyToken=1cee9f8bde3db106, processorArchitecture=MSIL">
-      <HintPath>..\packages\SSH.NET.2016.1.0\lib\net40\Renci.SshNet.dll</HintPath>
-    </Reference>
     <Reference Include="Sodium, Version=0.10.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Lib\Sodium.dll</HintPath>
@@ -87,6 +78,9 @@
       <DependentUpon>SSHControl.cs</DependentUpon>
     </Compile>
     <Compile Include="SshInfo.cs" />
+    <Compile Include="WinInterop\WindowInterop.cs" />
+    <Compile Include="WinInterop\WindowStyles.cs" />
+    <Compile Include="WinInterop\WindowStylesEx.cs" />
     <Compile Include="TelnetControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -147,13 +141,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Lib\Sodium.dll" />
-    <Content Include="License.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ConsoleLib\ConsoleLib.csproj">
-      <Project>{737cc7f2-ec7c-4800-b7eb-72637e892c42}</Project>
-      <Name>ConsoleLib</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="AxMSTSCLib">

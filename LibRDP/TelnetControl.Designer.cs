@@ -28,26 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.ConsoleUI = new ConsoleLib.ConsoleControl();
             this.SuspendLayout();
             // 
             // ConsoleUI
             // 
-            this.ConsoleUI.BackColor = System.Drawing.Color.Black;
-            this.ConsoleUI.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ConsoleUI.ForeColor = System.Drawing.Color.White;
-            this.ConsoleUI.IsInputEnabled = true;
-            this.ConsoleUI.Location = new System.Drawing.Point(0, 0);
-            this.ConsoleUI.MaxLines = 500;
-            this.ConsoleUI.Name = "ConsoleUI";
-            this.ConsoleUI.Size = new System.Drawing.Size(720, 576);
-            this.ConsoleUI.TabIndex = 0;
             // 
             // TelnetControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.ConsoleUI);
             this.Name = "TelnetControl";
             this.Size = new System.Drawing.Size(720, 576);
             this.ResumeLayout(false);
@@ -55,7 +44,5 @@
         }
 
         #endregion
-
-        private ConsoleLib.ConsoleControl ConsoleUI;
     }
 }

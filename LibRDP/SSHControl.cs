@@ -8,13 +8,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using LibRDP.WinInterop;
 
 namespace LibRDP
 {
     public partial class SSHControl : UserControl, IRemote
     {
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern int SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
+
+        public const string Putty = "putty.exe";
         public SshInfo SInfo { get; set; }
-        public Renci.SshNet.SshClient Client { get; set; }
+        //public Renci.SshNet.SshClient Client { get; set; }
 
         public SSHControl(RemoteInfo sinfo)
         {
@@ -24,9 +31,9 @@ namespace LibRDP
             CheckForIllegalCrossThreadCalls = false;
             InitializeComponent();
 
-            this.ConsoleUI.OnConsoleInput += this.ConsoleUI_OnConsoleInput;
-            this.ConsoleUI.IsInputEnabled = true;
-            this.ConsoleUI.InternalRichTextBox.WordWrap = this.SInfo.AutoWrap;
+            //this.ConsoleUI.OnConsoleInput += this.ConsoleUI_OnConsoleInput;
+            //this.ConsoleUI.IsInputEnabled = true;
+            //this.ConsoleUI.InternalRichTextBox.WordWrap = this.SInfo.AutoWrap;
             try { this.Encode = Encoding.GetEncoding(this.SInfo.Encode); }
             catch(Exception ef)
             {
@@ -37,92 +44,76 @@ namespace LibRDP
             this.SInfo.PropertyChangedRegister(nameof(this.SInfo.AutoWrap), PropertyChanged_Callback);
             this.SInfo.PropertyChangedRegister(nameof(this.SInfo.Encode), PropertyChanged_Callback);
 
-            string pass = sinfo.Password;
-            if (!string.IsNullOrWhiteSpace(pass))
-                pass = Utils.DecryptChaCha20(sinfo.Password, RemoteInfo.Nonce, RemoteInfo.SHA256);
-
-            this.Client = new Renci.SshNet.SshClient(sinfo.Ip, sinfo.Port, sinfo.User, pass);
-            this.Client.ErrorOccurred += this.Client_ErrorOccurred;
-            this.Client.ConnectionInfo.Timeout = new TimeSpan(0, 0, 2);
-            this.Client.ConnectionInfo.RetryAttempts = 2;
-            this.Client.ConnectionInfo.MaxSessions = 20;            
-        }
-
-        private void Client_ErrorOccurred(object sender, Renci.SshNet.Common.ExceptionEventArgs e)
-        {
-            MessageBox.Show(e.Exception.ToString());
+            
+            //this.Client = new Renci.SshNet.SshClient(sinfo.Ip, sinfo.Port, sinfo.User, pass);
+            //this.Client.ErrorOccurred += this.Client_ErrorOccurred;
+            //this.Client.ConnectionInfo.Timeout = new TimeSpan(0, 0, 2);
+            //this.Client.ConnectionInfo.RetryAttempts = 2;
+            //this.Client.ConnectionInfo.MaxSessions = 20;            
         }
 
         private Encoding Encode;
         private void PropertyChanged_Callback(object sender, PropertyChangedEventArgs args)
         {
-            if(args.PropertyName == nameof(this.SInfo.AutoWrap))
-                this.ConsoleUI.InternalRichTextBox.WordWrap = this.SInfo.AutoWrap;
-            else if(args.PropertyName == nameof(this.SInfo.Encode))
-            {
-                try { this.Encode = Encoding.GetEncoding(this.SInfo.Encode); }
-                catch { this.Encode = Encoding.UTF8; }
-            }
+            //if(args.PropertyName == nameof(this.SInfo.AutoWrap))
+            //    this.ConsoleUI.InternalRichTextBox.WordWrap = this.SInfo.AutoWrap;
+            //else if(args.PropertyName == nameof(this.SInfo.Encode))
+            //{
+            //    try { this.Encode = Encoding.GetEncoding(this.SInfo.Encode); }
+            //    catch { this.Encode = Encoding.UTF8; }
+            //}
         }
-
-        private void ConsoleUI_OnConsoleInput(object sender, ConsoleLib.ConsoleEventArgs args)
-        {
-            if (this.ShellSteam == null)
-                return;
-
-            if (args.Content.Trim() == "clear")
-                this.ConsoleUI.ClearOutput(false);
-
-            ShellSteam.Write(args.Content);
-        }        
 
         public bool IsFullScreen => throw new NotImplementedException();
 
         public event DisconnectEventHandler OnDisconnectedEvent;
 
-        private Renci.SshNet.ShellStream ShellSteam;        
+        private Process Client { get; set; }
         public void Connect()
         {
             this.SInfo.ConnectedStatus = ConnectedStatus.正在连接;
-            this.Client.KeepAliveInterval = this.SInfo.KeepAliveInterval;
-            if (!this.Client.IsConnected)
-            {
-                try { this.Client.Connect(); }
-                catch(Exception e)
-                {
-                    Logger.Error(e.ToString());
-                    this.Disconnect();
-                    this.OnDisconnectedEvent?.Invoke(this.SInfo, new DisconnectEventArgs(e.HResult, e.ToString()));
-                    return;
-                }
 
-                IDictionary<Renci.SshNet.Common.TerminalModes, uint> termkvp = new Dictionary<Renci.SshNet.Common.TerminalModes, uint>();
-                termkvp.Add(Renci.SshNet.Common.TerminalModes.ECHO, 53);
-                termkvp.Add(Renci.SshNet.Common.TerminalModes.ECHOCTL, 60);
+            string pass = this.SInfo.Password;
+            if (!string.IsNullOrWhiteSpace(pass))
+                pass = Utils.DecryptChaCha20(this.SInfo.Password, RemoteInfo.Nonce, RemoteInfo.SHA256);
 
-                ShellSteam = Client.CreateShellStream("xterm", 95, 30, (uint)this.Width - 20, (uint)this.Height, 1024 * 4, termkvp);
-                ShellSteam.DataReceived += this.ShellSteam_DataReceived;
-                this.SInfo.ConnectedStatus = ConnectedStatus.正常;
-            }
+            StringBuilder sb = new StringBuilder();
+            sb.Append($"-ssh -P {this.SInfo.Port} ");
 
-            Task.Run(() => {
-                while (true)
-                {
-                    if (!this.Client.IsConnected)
-                        this.Disconnect();
+            if (!string.IsNullOrWhiteSpace(this.SInfo.User))
+                sb.Append($"-l {this.SInfo.User} ");
 
-                    System.Threading.Thread.Sleep(100);
-                }
-            });
+            if (!string.IsNullOrWhiteSpace(pass))
+                sb.Append($"-pw {pass} ");
+
+            sb.Append(this.SInfo.Ip);
+            ProcessStartInfo info = new ProcessStartInfo(Putty, sb.ToString());
+            info.UseShellExecute = false;
+            info.WindowStyle = ProcessWindowStyle.Hidden;
+
+            this.Client = Process.Start(info);
+            this.Client.WaitForInputIdle();
+
+            SetParent(this.Client.MainWindowHandle, this.Handle);
+            var src = WindowInterop.GetWindowLong(this.Client.MainWindowHandle, WindowInterop.GWL_STYLE);
+
+            WindowInterop.SetWindowLong(this.Client.MainWindowHandle, WindowInterop.GWL_STYLE, (uint)(~WindowStyles.WS_CAPTION) & src);
+            
+            //WindowInterop.ShowWindow(this.Client.MainWindowHandle, 3);
+            
+            //Utils.MoveWindow(this.Client.MainWindowHandle, 0, 0, this.Width, this.Height, true);
+            //var c = Control.FromHandle(this.Client.MainWindowHandle);
+            //MessageBox.Show(c?.ToString());
+            //this.Controls.Add(c);
+
+            this.SInfo.ConnectedStatus = ConnectedStatus.正常;
         }
 
-        private void ShellSteam_DataReceived(object sender, Renci.SshNet.Common.ShellDataEventArgs e)
+        protected override void OnResize(EventArgs e)
         {
-            if (this.ConsoleUI.IsDisposed)
-                return;
-
-            var output = Encode.GetString(e.Data);
-            this.ConsoleUI.WriteOutput(output);
+            if (this.Client != null)
+                WindowInterop.MoveWindow(this.Client.MainWindowHandle, 0, 0, this.Width, this.Height, true);
+            base.OnResize(e);
         }
 
         public void Disconnect()
@@ -133,20 +124,7 @@ namespace LibRDP
                 return;
 
             this.SInfo.ConnectedStatus = ConnectedStatus.断开连接;
-            if (this.ShellSteam != null)
-            {
-                this.ShellSteam.Dispose();
-                this.ShellSteam = null;
-            }
-
-            if (this.Client != null)
-            {
-                this.Client.Disconnect();
-                this.Client.Dispose();
-                this.Client = null;
-            }
-
-            this.ConsoleUI.Dispose();
+            this.Client.Kill();
             this.Dispose();
             //this.OnDisconnectedEvent(this.SInfo, new DisconnectEventArgs(8888, "断开连接。。。"));
         }
