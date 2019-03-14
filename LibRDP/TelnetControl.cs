@@ -48,15 +48,11 @@ namespace LibRDP
             if (!string.IsNullOrWhiteSpace(this.SInfo.User))
                 sb.Append($"-l {this.SInfo.User} ");
 
-            //if (!string.IsNullOrWhiteSpace(pass))
-            //    sb.Append($"-pw {pass} ");
-
             sb.Append(this.SInfo.Ip);
             ProcessStartInfo info = new ProcessStartInfo(Putty, sb.ToString())
             {
                 UseShellExecute = false,
                 WindowStyle = ProcessWindowStyle.Hidden,
-                RedirectStandardInput = true,
                 
             };
 
@@ -74,17 +70,6 @@ namespace LibRDP
             WindowInterop.SetWindowLong(handle, WindowInterop.GWL_STYLE, src);
 
             this.SInfo.ConnectedStatus = ConnectedStatus.正常;
-
-            Task.Run(() =>
-            {
-                try
-                {
-                    System.Threading.Thread.Sleep(5000);
-                    this.Client.StandardInput.WriteLine(pass + "\n");
-                    Logger.Info("写入密码：" + pass);
-                }
-                catch (Exception fff) { MessageBox.Show(fff.ToString()); }
-            });
         }
 
         private void Client_Exited(object sender, EventArgs e)
