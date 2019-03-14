@@ -66,7 +66,8 @@ namespace LibRDP
             WindowInterop.ShowWindow(handle, WindowInterop.SW_MAXIMIZE);
 
             var src = WindowInterop.GetWindowLong(handle, WindowInterop.GWL_STYLE);
-            src = (uint)(~WindowStyles.WS_CAPTION) & src;
+            //src = (uint)(~WindowStyles.WS_CAPTION) & src;
+            src &= (uint)(~(WindowStyles.WS_CAPTION | WindowStyles.WS_BORDER | WindowStyles.WS_THICKFRAME));
             WindowInterop.SetWindowLong(handle, WindowInterop.GWL_STYLE, src);
 
             this.SInfo.ConnectedStatus = ConnectedStatus.正常;
