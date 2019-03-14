@@ -210,6 +210,16 @@ namespace LibRDP
             }
         }
 
+        private bool _canFull = true;
+        public virtual bool CanFullScreen
+        {
+            get { return this._canFull; }
+            set {
+                this._canFull = value;
+                this.RaisedPropertyChanged(nameof(CanFullScreen));
+            }
+        }
+        
         private string _memo = string.Empty;
         public string Memo
         {

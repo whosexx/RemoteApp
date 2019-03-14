@@ -33,20 +33,7 @@ namespace LibRDP
         ////public const int SWP_NOSIZE = 0x1;
         ////public const int WM_CLOSE = 0x10;
 
-        //public const int SW_HIDE = 0; //{隐藏, 并且任务栏也没有最小化图标}
-        //public const int SW_SHOWNORMAL = 1; //{用最近的大小和位置显示, 激活}
-        //public const int SW_NORMAL = 1; //{同 SW_SHOWNORMAL}
-        //public const int SW_SHOWMINIMIZED = 2; //{最小化, 激活}
-        //public const int SW_SHOWMAXIMIZED = 3; //{最大化, 激活}
-        //public const int SW_MAXIMIZE = 3; //{同 SW_SHOWMAXIMIZED}
-        //public const int SW_SHOWNOACTIVATE = 4; //{用最近的大小和位置显示, 不激活}
-        //public const int SW_SHOW = 5; //{同 SW_SHOWNORMAL}
-        //public const int SW_MINIMIZE = 6; //{最小化, 不激活}
-        //public const int SW_SHOWMINNOACTIVE = 7; //{同 SW_MINIMIZE}
-        //public const int SW_SHOWNA = 8; //{同 SW_SHOWNOACTIVATE}
-        //public const int SW_RESTORE = 9; //{同 SW_SHOWNORMAL}
-        //public const int SW_SHOWDEFAULT = 10; //{同 SW_SHOWNORMAL}
-        //public const int SW_MAX = 10; //{同 SW_SHOWNORMAL}
+        
         ////public const int WS_BORDER = 0x00800000;
         //public const int WS_CAPTION = 0x00C00000;
         ////const int PROCESS_ALL_ACCESS = 0x1F0FFF;

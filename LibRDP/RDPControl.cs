@@ -16,6 +16,8 @@ namespace LibRDP
 {
     public partial class RDPControl : UserControl, IRemote
     {
+        protected static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
         public RDPInfo RInfo { get; set; }
         public event DisconnectEventHandler OnDisconnectedEvent;
 

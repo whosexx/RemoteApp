@@ -18,64 +18,67 @@ namespace LibRDP
             var client = new LibRDP.SSHControl(this.RInfo);
             client.OnDisconnectedEvent += ClientHost_OnDisconnected;
 
-            var wf = new WindowsFormsHost();
-            wf.Background = Brushes.Black;
-            wf.Child = client;
+            var wf = new WindowsFormsHost
+            {
+                Background = Brushes.Black,
+                Child = client
+            };
 
             this.RObject = client;
             this.Host = wf;
             this.Host.IsEnabled = false;
         }
 
-        public SSHHost(LibRDP.RemoteInfo rinfo) : base(rinfo) { }
+        public SSHHost(RemoteInfo rinfo) : base(rinfo) { }
     }
 
-    public class SshInfo : LibRDP.RemoteInfo
+    public class SshInfo : RemoteInfo
     {
-        private TimeSpan time = new TimeSpan(0, 10, 0);
-        public TimeSpan KeepAliveInterval
-        {
-            get => this.time;
-            set
-            {
-                if (this.time == value)
-                    return;
+        public override bool CanFullScreen => false;
+        //private TimeSpan time = new TimeSpan(0, 10, 0);
+        //public TimeSpan KeepAliveInterval
+        //{
+        //    get => this.time;
+        //    set
+        //    {
+        //        if (this.time == value)
+        //            return;
 
-                this.time = value;
-                this.RaisedPropertyChanged(nameof(this.KeepAliveInterval));
-            }
-        }
+        //        this.time = value;
+        //        this.RaisedPropertyChanged(nameof(this.KeepAliveInterval));
+        //    }
+        //}
 
-        private string _encode = Encoding.UTF8.EncodingName;
-        public string Encode
-        {
-            get => string.IsNullOrWhiteSpace(this._encode) ? Encoding.UTF8.EncodingName : this._encode;
-            set
-            {
-                if (this._encode == value)
-                    return;
+        //private string _encode = Encoding.UTF8.EncodingName;
+        //public string Encode
+        //{
+        //    get => string.IsNullOrWhiteSpace(this._encode) ? Encoding.UTF8.EncodingName : this._encode;
+        //    set
+        //    {
+        //        if (this._encode == value)
+        //            return;
 
-                if (string.IsNullOrWhiteSpace(value))
-                    this._encode = Encoding.UTF8.EncodingName;
-                else
-                    this._encode = value;
-                this.RaisedPropertyChanged(nameof(this.Encode));
-            }
-        }
+        //        if (string.IsNullOrWhiteSpace(value))
+        //            this._encode = Encoding.UTF8.EncodingName;
+        //        else
+        //            this._encode = value;
+        //        this.RaisedPropertyChanged(nameof(this.Encode));
+        //    }
+        //}
 
-        private bool _autowrap = true;
-        public bool AutoWrap
-        {
-            get => this._autowrap;
-            set
-            {
-                if (this._autowrap == value)
-                    return;
+        //private bool _autowrap = true;
+        //public bool AutoWrap
+        //{
+        //    get => this._autowrap;
+        //    set
+        //    {
+        //        if (this._autowrap == value)
+        //            return;
 
-                this._autowrap = value;
-                this.RaisedPropertyChanged(nameof(this.AutoWrap));
-            }
-        }
+        //        this._autowrap = value;
+        //        this.RaisedPropertyChanged(nameof(this.AutoWrap));
+        //    }
+        //}
 
         public SshInfo() : base(Protocol.SSH)
         {

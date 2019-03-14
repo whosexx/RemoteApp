@@ -68,17 +68,17 @@
                     <PasswordBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"
                          IsEnabled="True" Name="Password" Margin="10,2,10,2" />
 
-                    <TextBlock Grid.Row="6" Grid.Column="0" Text="自动换行：" VerticalAlignment="Center" 
+                    <!--<TextBlock Grid.Row="6" Grid.Column="0" Text="自动换行：" VerticalAlignment="Center" 
                        HorizontalAlignment="Right" Foreground="Black" />
                     <CheckBox Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2"
                       IsChecked="{Binding RInfo.AutoWrap, UpdateSourceTrigger=PropertyChanged}"
-                      Margin="10,2,10,2" Foreground="Green" Content="(是否允许输出自动换行)" />
+                      Margin="10,2,10,2" Foreground="Green" Content="(是否允许输出自动换行)" />-->
 
                     <TextBlock Grid.Row="7" Grid.Column="0" Text="注释：" VerticalAlignment="Top" 
                        HorizontalAlignment="Right" Foreground="Black" />
                     <TextBox Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" TextWrapping="Wrap" 
-                     AcceptsReturn="True" AcceptsTab="True" MaxWidth="260" MinHeight="50"
-                     Margin="10,2,10,2" Text="{Binding RInfo.Memo, UpdateSourceTrigger=PropertyChanged}" 
+                     AcceptsReturn="True" AcceptsTab="True" MaxWidth="286" MinHeight="50"
+                     Margin="0,2,0,2" Text="{Binding RInfo.Memo, UpdateSourceTrigger=PropertyChanged}" 
                      local:TextBoxBehavior.SelectedAllOnGotFocus="True"/>
                 </Grid>
             </ScrollViewer>

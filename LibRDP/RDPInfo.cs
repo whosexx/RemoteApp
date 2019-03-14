@@ -31,7 +31,7 @@ namespace LibRDP
         public static event LibRDP.DisconnectEventHandler OnDisconnectedEvent;
         protected void ClientHost_OnDisconnected(object sender, LibRDP.DisconnectEventArgs e)
         {
-            Logger.WriteLine(e.ErrCode+ ", " + e.Reason);
+            Logger.Info(e.ErrCode+ ", " + e.Reason);
             OnDisconnectedEvent?.Invoke(sender, e);
         }
 

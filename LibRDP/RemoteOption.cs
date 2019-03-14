@@ -29,6 +29,8 @@ namespace LibRDP
 
     public abstract class ElementHost : IHost, INotifyPropertyChanged
     {
+        protected static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
         protected static int _Index = 0;
         private int index;
         public virtual int RZIndex

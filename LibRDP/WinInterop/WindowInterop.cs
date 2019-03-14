@@ -19,17 +19,32 @@ namespace LibRDP.WinInterop
         [DllImport("user32.dll")]
         public static extern bool MoveWindow(IntPtr hwnd, int x, int y, int cx, int cy, bool repaint);
 
-
         [DllImport("user32.dll", EntryPoint = "ShowWindow", SetLastError = true)]
         public static extern bool ShowWindow(IntPtr hWnd, uint nCmdShow);
 
-
+        [DllImport("user32.dll")]
+        public static extern int SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
 
 
 
 
 
         public const int GWL_STYLE = (-16);
+        public const int SW_HIDE = 0; //{隐藏, 并且任务栏也没有最小化图标}
+        public const int SW_SHOWNORMAL = 1; //{用最近的大小和位置显示, 激活}
+        public const int SW_NORMAL = 1; //{同 SW_SHOWNORMAL}
+        public const int SW_SHOWMINIMIZED = 2; //{最小化, 激活}
+        public const int SW_SHOWMAXIMIZED = 3; //{最大化, 激活}
+        public const int SW_MAXIMIZE = 3; //{同 SW_SHOWMAXIMIZED}
+        public const int SW_SHOWNOACTIVATE = 4; //{用最近的大小和位置显示, 不激活}
+        public const int SW_SHOW = 5; //{同 SW_SHOWNORMAL}
+        public const int SW_MINIMIZE = 6; //{最小化, 不激活}
+        public const int SW_SHOWMINNOACTIVE = 7; //{同 SW_MINIMIZE}
+        public const int SW_SHOWNA = 8; //{同 SW_SHOWNOACTIVATE}
+        public const int SW_RESTORE = 9; //{同 SW_SHOWNORMAL}
+        public const int SW_SHOWDEFAULT = 10; //{同 SW_SHOWNORMAL}
+        public const int SW_MAX = 10; //{同 SW_SHOWNORMAL}
+
         public static void SetControlEnabled(IntPtr c, bool enabled)
         {
             if (enabled)

@@ -88,7 +88,6 @@ namespace RemoteApp
 
         private void Box_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Logger.WriteLine("Box_SelectionChanged");
             e.Handled = true;
         }
 

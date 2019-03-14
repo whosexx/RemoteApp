@@ -153,6 +153,8 @@ namespace RemoteApp
             this.Height = DefaultSize.Height;
         }
 
+        public bool CanFullScreen => this.RInfo.CanFullScreen;
+
         public bool IsFullScreen
         {
             get

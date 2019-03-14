@@ -72,6 +72,8 @@ namespace RemoteApp
 
     public class LengthConverter : IValueConverter
     {
+        protected static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
         public double Standard { get; set; } = 40.0;
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -79,7 +81,7 @@ namespace RemoteApp
                 return 0.0;
 
             double val = (double)value;
-            Logger.WriteLine("Length:" + val);
+            Logger.Info("Length:" + val);
             return val - Standard;
         }
 
@@ -117,7 +119,7 @@ namespace RemoteApp
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             RemoteClient client = value as RemoteClient;
-            if (client == null)
+            if (client == null || !client.CanFullScreen)
                 return Visibility.Collapsed;
 
             if (!(client.RInfo is EmptyInfo))

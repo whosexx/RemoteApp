@@ -64,7 +64,7 @@ namespace RemoteApp
             vLastInputInfo.cbSize = Marshal.SizeOf(vLastInputInfo);
             if (!GetLastInputInfo(ref vLastInputInfo))
                 return 0;
-            Logger.WriteLine("SystemIdleTick:" + (Environment.TickCount - (long)vLastInputInfo.dwTime).ToString());
+
             return Environment.TickCount - (long)vLastInputInfo.dwTime;
         }
 

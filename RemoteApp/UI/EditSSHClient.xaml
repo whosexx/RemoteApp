@@ -68,7 +68,7 @@
                     <PasswordBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"
                          IsEnabled="True" Name="Password" Margin="10,2,10,2" />
 
-                    <TextBlock Grid.Row="5" Grid.Column="0" Text="编码：" VerticalAlignment="Center" 
+                    <!--<TextBlock Grid.Row="5" Grid.Column="0" Text="编码：" VerticalAlignment="Center" 
                        HorizontalAlignment="Right" Foreground="Black" />
                     <ComboBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" IsEditable="True" Name="Code"
                               SelectedItem="{Binding RInfo.Encode, UpdateSourceTrigger=PropertyChanged}" 
@@ -84,13 +84,13 @@
                        HorizontalAlignment="Right" Foreground="Black" />
                     <xceed:TimeSpanUpDown Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2"
                       Value="{Binding RInfo.KeepAliveInterval, UpdateSourceTrigger=PropertyChanged}"
-                      Margin="10,2,10,2" Foreground="Green" />
+                      Margin="10,2,10,2" Foreground="Green" />-->
                     
                     <TextBlock Grid.Row="8" Grid.Column="0" Text="注释：" VerticalAlignment="Top" 
                        HorizontalAlignment="Right" Foreground="Black" />
                     <TextBox Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2" TextWrapping="Wrap" 
-                     AcceptsReturn="True" AcceptsTab="True" MaxWidth="260" MinHeight="50"
-                     Margin="10,2,10,2" Text="{Binding RInfo.Memo, UpdateSourceTrigger=PropertyChanged}" 
+                     AcceptsReturn="True" AcceptsTab="True" MaxWidth="286" MinHeight="50"
+                     Margin="0,2,0,2" Text="{Binding RInfo.Memo, UpdateSourceTrigger=PropertyChanged}" 
                      local:TextBoxBehavior.SelectedAllOnGotFocus="True"/>
                 </Grid>
             </ScrollViewer>            

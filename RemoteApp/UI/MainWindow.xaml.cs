@@ -31,6 +31,8 @@ namespace RemoteApp.UI
     /// </summary>
     public partial class MainWindow : Window
     {
+        protected static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
         public const string ConfigPath = "Config";
         public const string SConfig = "RInfos.json";
 
@@ -236,7 +238,7 @@ namespace RemoteApp.UI
                 System.IO.FileInfo finfo = new System.IO.FileInfo("Update.exe");
                 if (finfo.Exists)
                     Utils.CMD(args, finfo.Name);
-            }catch(Exception e) { Logger.WriteLine(e.ToString()); }
+            }catch(Exception e) { Logger.Error(e.ToString()); }
         }
 
         #region 窗口初始化
@@ -373,7 +375,7 @@ namespace RemoteApp.UI
             this.Selector.Focus();
 
             Task.Run(() => {
-                System.Threading.Thread.Sleep(100);
+                System.Threading.Thread.Sleep(1000);
                 if (Properties.Settings.Default.Opened != null 
                     && Properties.Settings.Default.Opened.Count > 0)
                 {
@@ -598,7 +600,7 @@ namespace RemoteApp.UI
                 if (p.RInfo.Protocol == Protocol.Empty)
                 {
                     this.PInfos.Remove(p);                                     
-                    Logger.WriteLine("Remove Type:" + p.GetType() + "," + p.RInfo.Ip);
+                    Logger.Info("Remove Type:" + p.GetType() + "," + p.RInfo.Ip);
                 }
             }
 
@@ -621,7 +623,7 @@ namespace RemoteApp.UI
         private void RemoteClient_OnDisconnected(object sender, DisconnectEventArgs e)
         {
             RemoteInfo rinfo = sender as RemoteInfo;
-            Logger.WriteLine(rinfo.Ip + ": " + e.ErrCode + "," + e.Reason);
+            Logger.Info(rinfo.Ip + ": " + e.ErrCode + "," + e.Reason);
             WindowState state = WindowState.Normal;
             this.Dispatcher.Invoke(() => {
                 state = this.WindowState;
@@ -1661,6 +1663,8 @@ namespace RemoteApp.UI
     //拖拽模版
     public class DragAdorner : Adorner
     {
+        protected static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
         private UIElement Template { get; set; }
         private VisualBrush TVB { get; set; }
 
@@ -1683,7 +1687,7 @@ namespace RemoteApp.UI
             if (Template != null)
             {
                 Point pos = new Point(System.Windows.Forms.Control.MousePosition.X, System.Windows.Forms.Control.MousePosition.Y);
-                Logger.WriteLine(pos.ToString());
+                Logger.Info(pos.ToString());
                 pos = PointFromScreen(pos);
                 Rect rect = new Rect(pos.X - 25, pos.Y - 25, this.Width, this.Height);
                 drawingContext.DrawRectangle(TVB, new Pen(Brushes.Transparent, 0), rect);

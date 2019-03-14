@@ -29,21 +29,9 @@ namespace LibRDP
         public TelnetHost(LibRDP.RemoteInfo rinfo) : base(rinfo) { }
     }
 
-    public class TelnetInfo : LibRDP.RemoteInfo
+    public class TelnetInfo : RemoteInfo
     {
-        private bool _autowrap = true;
-        public bool AutoWrap
-        {
-            get => this._autowrap;
-            set
-            {
-                if (this._autowrap == value)
-                    return;
-
-                this._autowrap = value;
-                this.RaisedPropertyChanged(nameof(this.AutoWrap));
-            }
-        }
+        public override bool CanFullScreen => false;
 
         public TelnetInfo() : base(Protocol.TELNET)
         {

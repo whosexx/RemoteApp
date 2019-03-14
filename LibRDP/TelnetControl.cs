@@ -7,13 +7,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics;
+using LibRDP.WinInterop;
 
 namespace LibRDP
 {
     public partial class TelnetControl : UserControl, IRemote
     {
+        protected static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
         public TelnetInfo SInfo { get; set; }
-        //public PrimS.Telnet.Client Client { get; set; }
+
+        public const string Putty = "putty.exe";
 
         public TelnetControl(RemoteInfo sinfo)
         {
@@ -21,106 +26,111 @@ namespace LibRDP
             this.SInfo = ssh ?? throw new ArgumentNullException("参数错误。。");
 
             CheckForIllegalCrossThreadCalls = false;
-            InitializeComponent();
+            InitializeComponent();            
+        }     
 
-            //this.ConsoleUI.OnConsoleInput += this.ConsoleUI_OnConsoleInput;
-            //this.ConsoleUI.IsInputEnabled = true;
-
-            //this.ConsoleUI.InternalRichTextBox.WordWrap = this.SInfo.AutoWrap;            
-
-            this.SInfo.PropertyChangedRegister(nameof(this.SInfo.AutoWrap), PropertyChanged_Callback);
-
-            System.Threading.CancellationToken token = new System.Threading.CancellationToken();
-            //this.Client = new PrimS.Telnet.Client(this.SInfo.Ip, this.SInfo.Port, token);            
-        }
-
-        private void PropertyChanged_Callback(object sender, PropertyChangedEventArgs args)
-        {
-            //if (args.PropertyName == nameof(this.SInfo.AutoWrap))
-            //    this.ConsoleUI.InternalRichTextBox.WordWrap = this.SInfo.AutoWrap;            
-        }
-
-        //private async void ConsoleUI_OnConsoleInput(object sender, ConsoleLib.ConsoleEventArgs args)
-        //{
-        //    if (this.ConsoleUI.IsDisposed)
-        //        return;
-
-        //    if (args.Content.Trim() == "clear")
-        //        this.ConsoleUI.ClearOutput(false);
-
-        //    await this.Client.Write(args.Content);
-        //}        
-
-        public bool IsFullScreen => throw new NotImplementedException();
+        public bool IsFullScreen => false;
 
         public event DisconnectEventHandler OnDisconnectedEvent;
+
+        private Process Client { get; set; }
         public void Connect()
         {
             this.SInfo.ConnectedStatus = ConnectedStatus.正在连接;
-            try
+
+            string pass = string.Empty;
+            if (!string.IsNullOrWhiteSpace(this.SInfo.Password))
+                pass = Utils.DecryptChaCha20(this.SInfo.Password, RemoteInfo.Nonce, RemoteInfo.SHA256);
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append($"-telnet -P {this.SInfo.Port} ");
+
+            if (!string.IsNullOrWhiteSpace(this.SInfo.User))
+                sb.Append($"-l {this.SInfo.User} ");
+
+            //if (!string.IsNullOrWhiteSpace(pass))
+            //    sb.Append($"-pw {pass} ");
+
+            sb.Append(this.SInfo.Ip);
+            ProcessStartInfo info = new ProcessStartInfo(Putty, sb.ToString())
             {
-                if (string.IsNullOrWhiteSpace(this.SInfo.User))
-                    goto THREAD;
+                UseShellExecute = false,
+                WindowStyle = ProcessWindowStyle.Hidden,
+                RedirectStandardInput = true,
+                
+            };
 
-                string pass = string.Empty;
-                if (!string.IsNullOrWhiteSpace(this.SInfo.Password))
-                    pass = Utils.DecryptChaCha20(this.SInfo.Password, RemoteInfo.Nonce, RemoteInfo.SHA256);
+            this.Client = Process.Start(info);
+            this.Client.EnableRaisingEvents = true;
+            this.Client.Exited += this.Client_Exited;
+            Logger.Info("WaitForInputIdle: " + this.Client.WaitForInputIdle());
 
-                //this.Client.TryLoginAsync(this.SInfo.User, pass, 250);
+            var handle = this.Client.MainWindowHandle;
+            WindowInterop.SetParent(handle, this.Handle);
+            WindowInterop.ShowWindow(handle, WindowInterop.SW_MAXIMIZE);
 
-                THREAD:;
-                //Task.Run(() => {
-                //    while (this.Client.IsConnected)
-                //    {
-                //        var result = this.Client.ReadAsync(new TimeSpan(0, 0, 5));
-                //        if (string.IsNullOrEmpty(result.Result))
-                //            continue;
+            var src = WindowInterop.GetWindowLong(handle, WindowInterop.GWL_STYLE);
+            src = (uint)(~WindowStyles.WS_CAPTION) & src;
+            WindowInterop.SetWindowLong(handle, WindowInterop.GWL_STYLE, src);
 
-                //        if (this.ConsoleUI.IsDisposed)
-                //            return;
+            this.SInfo.ConnectedStatus = ConnectedStatus.正常;
 
-                //        this.ConsoleUI.WriteOutput(result.Result);
-                //    }
-                //    this.OnDisconnectedEvent?.Invoke(this.SInfo, new DisconnectEventArgs(8888, "断开链接……"));
-                //});
-            }
-            finally
+            Task.Run(() =>
             {
-                //if (this.Client.IsConnected)
-                //    this.SInfo.ConnectedStatus = ConnectedStatus.正常;
-            }
+                try
+                {
+                    System.Threading.Thread.Sleep(5000);
+                    this.Client.StandardInput.WriteLine(pass + "\n");
+                    Logger.Info("写入密码：" + pass);
+                }
+                catch (Exception fff) { MessageBox.Show(fff.ToString()); }
+            });
         }
 
+        private void Client_Exited(object sender, EventArgs e)
+        {
+            if (!this.manual)
+                this.OnDisconnectedEvent?.Invoke(this.SInfo, new DisconnectEventArgs(4879, "Telnet已经断开连接。。。"));
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            if (this.Client != null)
+                WindowInterop.MoveWindow(this.Client.MainWindowHandle, 0, 0, this.Width, this.Height, true);
+
+            base.OnResize(e);
+        }
+
+        private bool manual = false;
         public void Disconnect()
         {
             if (this.SInfo.ConnectedStatus != ConnectedStatus.正常
                 && this.SInfo.ConnectedStatus != ConnectedStatus.正在连接)
                 return;
-
+            
             this.SInfo.ConnectedStatus = ConnectedStatus.断开连接;
-            //if (this.Client != null && this.Client.IsConnected)
-            //{
-            //    this.Client.Dispose();
-            //    this.Client = null;
-            //}
+            if (!this.Client.HasExited)
+            {
+                this.manual = true;
+                this.Client.Kill();
+            }
 
-            //this.ConsoleUI.Dispose();
             this.Dispose();
         }
 
         public void EnterFullScreen()
         {
-            throw new NotImplementedException();
+            
         }
 
         public void ExitFullScreen()
         {
-            throw new NotImplementedException();
+            
         }
 
         public void SetTag(object tag)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

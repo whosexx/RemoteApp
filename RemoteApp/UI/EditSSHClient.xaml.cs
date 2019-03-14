@@ -31,7 +31,7 @@ namespace RemoteApp.UI
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            this.Code.ItemsSource = Encoding.GetEncodings().Select(m => m.DisplayName);
+            //this.Code.ItemsSource = Encoding.GetEncodings().Select(m => m.DisplayName);
             var rdp = new RemoteClient(Protocol.SSH);
             if (this.Client != null)
             {
