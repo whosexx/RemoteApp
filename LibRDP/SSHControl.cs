@@ -70,7 +70,7 @@ namespace LibRDP
             this.Client = SSHClient.Start(sb.ToString());
             this.Client.Exited += this.Client_Exited;
 
-            if(this.Client.FuseForm(this.Handle))
+            if(this.Client.FuseForm(this.Handle, 500))
                 pass.SimulateSendKeys();
 
             this.SInfo.ConnectedStatus = ConnectedStatus.正常;
@@ -123,5 +123,7 @@ namespace LibRDP
         {
             
         }
+
+        public void Active() => this.Client.MainWindowHandle.ActiveWindow();
     }
 }

@@ -177,6 +177,8 @@ namespace RemoteApp
             this.RInfo.EHost?.RObject?.ExitFullScreen();
         }
 
+        public void Active() => this.RInfo.EHost?.RObject?.Active();
+
         public void Close()
         {
             this.RInfo.EHost.Close();

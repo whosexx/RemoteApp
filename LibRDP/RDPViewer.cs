@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using LibRDP.WinInterop;
 
 namespace LibRDP
 {
@@ -79,6 +80,8 @@ namespace LibRDP
             this.axRDPViewer.Dispose();
             this.Dispose();
         }
+
+        public void Active() => this.axRDPViewer.Handle.ActiveWindow();
 
         private void AxRDPViewer_OnError(object sender, AxRDPCOMAPILib._IRDPSessionEvents_OnErrorEvent e)
         {

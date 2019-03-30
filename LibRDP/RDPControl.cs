@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using AxMSTSCLib;
 using MSTSCLib;
+using LibRDP.WinInterop;
 
 namespace LibRDP
 {
@@ -213,6 +214,8 @@ namespace LibRDP
             this.Client.FullScreen = false;
             this.RInfo.FullScreen = false;
         }
+
+        public void Active() => this.rdpc.Handle.ActiveWindow();
 
         private void Rdpc_OnConnecting() => this.RInfo.ConnectedStatus = ConnectedStatus.正在连接;
 

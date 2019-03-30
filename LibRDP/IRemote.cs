@@ -41,5 +41,7 @@ namespace LibRDP
         void ExitFullScreen();
 
         void SetTag(object tag);
+
+        void Active();
     }
 }

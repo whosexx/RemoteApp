@@ -5,6 +5,8 @@
         <MenuItem Command="{x:Static ApplicationCommands.Close}" CommandParameter="{Binding Parent.PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}" />
         <MenuItem Command="local:DCommand.CloseOther" CommandParameter="{Binding Parent.PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}" />
         <MenuItem Command="local:DCommand.CloseAll" CommandParameter="{Binding Parent.PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}" />
+        <Separator />
+        <MenuItem Command="local:DCommand.SendPW" CommandParameter="{Binding Parent.PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}" />
         <Separator x:Name="sep1" />
         <MenuItem x:Name="edit" Command="local:DCommand.Edit" CommandParameter="{Binding Parent.PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}" />
         <Separator x:Name="sep2" />

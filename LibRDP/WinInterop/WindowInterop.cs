@@ -26,9 +26,10 @@ namespace LibRDP.WinInterop
         [DllImport("user32.dll")]
         public static extern int SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
 
+        [DllImport("user32.dll")]
+        public static extern int SetForegroundWindow(IntPtr hwnd);
 
-
-
+        public static void ActiveWindow(this IntPtr hwnd) => SetForegroundWindow(hwnd);
 
         public const int GWL_STYLE = (-16);
         public const int SW_HIDE = 0; //{隐藏, 并且任务栏也没有最小化图标}

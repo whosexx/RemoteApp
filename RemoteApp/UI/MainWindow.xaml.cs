@@ -911,7 +911,23 @@ namespace RemoteApp.UI
 
             var edit = this.GetClientUI(client.RInfo.Protocol, client);
             edit.ShowDialog();
-        }        
+        }
+
+        private void CMD_SendPW_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            RemoteClient client = e.Parameter as RemoteClient;
+            if (client == null)
+                client = this.Thumbnail.SelectedItem as RemoteClient;
+
+            if (client == null)
+                return;
+
+            if (!(client is RemoteClient))
+                return;
+
+            client.Active();
+            client.RInfo.Password.DecryptChaCha20(Properties.Settings.Default.Nonce, Properties.Settings.Default.SHA256).SimulateSendKeys();
+        }
 
         private void CMD_New_Executed(object sender, ExecutedRoutedEventArgs e)
         {

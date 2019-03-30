@@ -126,6 +126,21 @@ namespace RemoteApp
             }
         }
 
+        private static RoutedUICommand _sendPW;
+        public static RoutedUICommand SendPW
+        {
+            get
+            {
+                if (_sendPW == null)
+                {
+                    KeyGesture key = new KeyGesture(Key.F3);
+                    _sendPW = new RoutedUICommand("发送密码(_P)", "SendPW", typeof(RoutedUICommand), new InputGestureCollection() { key });
+                }
+
+                return _sendPW;
+            }
+        }
+
         private static RoutedCommand _max;
         public static RoutedCommand Max
         {

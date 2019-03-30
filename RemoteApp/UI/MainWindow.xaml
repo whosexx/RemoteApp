@@ -190,7 +190,8 @@
 
         <CommandBinding Command="local:DCommand.ModifyAlias" Executed="CMD_ModifyAlias_Executed" />
         <CommandBinding Command="local:DCommand.Edit" CanExecute="CMD_Edit_CanExecute" Executed="CMD_Edit_Executed" />
-
+        <CommandBinding Command="local:DCommand.SendPW" Executed="CMD_SendPW_Executed" />
+        
         <CommandBinding Command="local:DCommand.Max" CanExecute="CMD_Max_CanExecute" Executed="CMD_Max_Executed" />
         <CommandBinding Command="local:DCommand.Center" CanExecute="CMD_Edit_CanExecute" Executed="CMD_Center_Executed" />
 

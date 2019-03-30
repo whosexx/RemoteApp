@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using LibRDP.WinInterop;
 
 namespace LibRDP
 {
@@ -142,5 +143,7 @@ namespace LibRDP
             var dis = new DisconnectEventArgs(ErrCode, "客户端已经断开连接……");
             this.OnDisconnectedEvent?.Invoke(this.VInfo, dis);
         }
+
+        public void Active() => this.RDesk.Handle.ActiveWindow();
     }
 }
