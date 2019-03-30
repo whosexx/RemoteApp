@@ -35,50 +35,20 @@ namespace LibRDP
     public class SshInfo : RemoteInfo
     {
         public override bool CanFullScreen => false;
-        //private TimeSpan time = new TimeSpan(0, 10, 0);
-        //public TimeSpan KeepAliveInterval
-        //{
-        //    get => this.time;
-        //    set
-        //    {
-        //        if (this.time == value)
-        //            return;
 
-        //        this.time = value;
-        //        this.RaisedPropertyChanged(nameof(this.KeepAliveInterval));
-        //    }
-        //}
+        private bool _usessh = true;
+        public bool UseOpenSSH
+        {
+            get => this._usessh;
+            set
+            {
+                if (this._usessh == value)
+                    return;
 
-        //private string _encode = Encoding.UTF8.EncodingName;
-        //public string Encode
-        //{
-        //    get => string.IsNullOrWhiteSpace(this._encode) ? Encoding.UTF8.EncodingName : this._encode;
-        //    set
-        //    {
-        //        if (this._encode == value)
-        //            return;
-
-        //        if (string.IsNullOrWhiteSpace(value))
-        //            this._encode = Encoding.UTF8.EncodingName;
-        //        else
-        //            this._encode = value;
-        //        this.RaisedPropertyChanged(nameof(this.Encode));
-        //    }
-        //}
-
-        //private bool _autowrap = true;
-        //public bool AutoWrap
-        //{
-        //    get => this._autowrap;
-        //    set
-        //    {
-        //        if (this._autowrap == value)
-        //            return;
-
-        //        this._autowrap = value;
-        //        this.RaisedPropertyChanged(nameof(this.AutoWrap));
-        //    }
-        //}
+                this._usessh = value;
+                this.RaisedPropertyChanged(nameof(this.UseOpenSSH));
+            }
+        }
 
         public SshInfo() : base(Protocol.SSH)
         {

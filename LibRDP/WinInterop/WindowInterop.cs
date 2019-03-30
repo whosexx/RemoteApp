@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -8,7 +9,7 @@ using System.Windows.Forms;
 
 namespace LibRDP.WinInterop
 {
-    public class WindowInterop
+    public static class WindowInterop
     {
         [DllImport("user32.dll ")]
         public static extern int SetWindowLong(IntPtr hWnd, int nIndex, uint wndproc);
@@ -51,6 +52,41 @@ namespace LibRDP.WinInterop
             { SetWindowLong(c, GWL_STYLE, (uint)(~WindowStyles.WS_DISABLED) & GetWindowLong(c, GWL_STYLE)); }
             else
             { SetWindowLong(c, GWL_STYLE, (uint)WindowStyles.WS_DISABLED | GetWindowLong(c, GWL_STYLE)); }
+        }
+
+        public static Process Start(this string cmd, string arg)
+        {
+            ProcessStartInfo info = new ProcessStartInfo(cmd, arg)
+            {
+                UseShellExecute = false,
+                WindowStyle = ProcessWindowStyle.Hidden,
+
+            };
+
+            var Client = Process.Start(info);
+            Client.EnableRaisingEvents = true;
+            return Client;
+        }
+
+        public static bool FuseForm(this Process p, IntPtr parents, int ms = 250)
+        {
+            bool cmd = false;
+            try { p.WaitForInputIdle(); }
+            catch
+            {
+                System.Threading.Thread.Sleep(ms);
+                cmd = true;
+            }
+
+            var handle = p.MainWindowHandle;
+            WindowInterop.SetParent(handle, parents);
+            WindowInterop.ShowWindow(handle, WindowInterop.SW_MAXIMIZE);
+
+            var src = WindowInterop.GetWindowLong(handle, WindowInterop.GWL_STYLE);
+            src &= (uint)(~(WindowStyles.WS_CAPTION | WindowStyles.WS_BORDER | WindowStyles.WS_THICKFRAME));
+            WindowInterop.SetWindowLong(handle, WindowInterop.GWL_STYLE, src);
+
+            return cmd;
         }
     }
 }

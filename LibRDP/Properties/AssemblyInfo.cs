@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("远程桌面库")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("北京中传数广技术有限公司")]
+[assembly: AssemblyCompany("DarkV")]
 [assembly: AssemblyProduct("远程桌面库")]
-[assembly: AssemblyCopyright("Copyright © ChinaEPG 2016")]
+[assembly: AssemblyCopyright("Copyright © DarkV 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -33,4 +33,4 @@ using System.Runtime.InteropServices;
 // 方法是按如下所示使用“*”: :
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("2.2.0")]
-[assembly: AssemblyFileVersion("2.2.1")]
+[assembly: AssemblyFileVersion("2.2.2")]

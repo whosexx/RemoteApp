@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace LibRDP
 {
-    public class Utils
+    public static class Utils
     {
         
 
@@ -58,13 +58,25 @@ namespace LibRDP
         //      WS_BORDER = 0x00800000;
 
 
+            public static readonly char[] Specials = new char[] { '+', '^', '%', '~', '(', ')' };
+        public static void SimulateSendKeys(this string keys)
+        {
+            //模拟发送+、^、%、~及圆括号 ( ) ，要将它放在大括号 ({}) 当中
+            if (string.IsNullOrEmpty(keys))
+                keys = string.Empty;
+                
+            foreach (var sss in Specials)
+                keys = keys.Replace(sss.ToString(), "{" + sss + "}");
 
-
+            SendKeys.SendWait(keys);
+            SendKeys.SendWait("\n\n");
+            SendKeys.Flush();
+        }
 
 
         
 
-        public static string CalcSHA256(string value)
+        public static string CalcSHA256(this string value)
         {
             if (value == null)
                 return null;
@@ -73,7 +85,7 @@ namespace LibRDP
             return Convert.ToBase64String(CalcSHA256(retval));
         }
 
-        public static byte[] CalcSHA256(byte[] value)
+        public static byte[] CalcSHA256(this byte[] value)
         {
             if (value == null)
                 return null;
@@ -89,7 +101,7 @@ namespace LibRDP
             }
         }
 
-        public static string EncryptChaCha20(string msg, string nonce, string key)
+        public static string EncryptChaCha20(this string msg, string nonce, string key)
         {
             if (string.IsNullOrWhiteSpace(key) || nonce.Length != 8)
                 return string.Empty;
@@ -101,7 +113,7 @@ namespace LibRDP
             return Convert.ToBase64String(bs);
         }
 
-        public static string DecryptChaCha20(string msg, string nonce, string key)
+        public static string DecryptChaCha20(this string msg, string nonce, string key)
         {
             if (string.IsNullOrWhiteSpace(key) || nonce.Length != 8)
                 return string.Empty;

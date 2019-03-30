@@ -49,26 +49,12 @@ namespace LibRDP
                 sb.Append($"-l {this.SInfo.User} ");
 
             sb.Append(this.SInfo.Ip);
-            ProcessStartInfo info = new ProcessStartInfo(Putty, sb.ToString())
-            {
-                UseShellExecute = false,
-                WindowStyle = ProcessWindowStyle.Hidden,
-                
-            };
 
-            this.Client = Process.Start(info);
-            this.Client.EnableRaisingEvents = true;
+            this.Client = Putty.Start(sb.ToString());
             this.Client.Exited += this.Client_Exited;
-            Logger.Info("WaitForInputIdle: " + this.Client.WaitForInputIdle());
-
-            var handle = this.Client.MainWindowHandle;
-            WindowInterop.SetParent(handle, this.Handle);
-            WindowInterop.ShowWindow(handle, WindowInterop.SW_MAXIMIZE);
-
-            var src = WindowInterop.GetWindowLong(handle, WindowInterop.GWL_STYLE);
-            //src = (uint)(~WindowStyles.WS_CAPTION) & src;
-            src &= (uint)(~(WindowStyles.WS_CAPTION | WindowStyles.WS_BORDER | WindowStyles.WS_THICKFRAME));
-            WindowInterop.SetWindowLong(handle, WindowInterop.GWL_STYLE, src);
+            
+            this.Client.FuseForm(this.Handle);
+            pass.SimulateSendKeys();
 
             this.SInfo.ConnectedStatus = ConnectedStatus.正常;
         }

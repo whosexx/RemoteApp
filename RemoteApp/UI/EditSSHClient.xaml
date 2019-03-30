@@ -72,15 +72,15 @@
                        HorizontalAlignment="Right" Foreground="Black" />
                     <ComboBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" IsEditable="True" Name="Code"
                               SelectedItem="{Binding RInfo.Encode, UpdateSourceTrigger=PropertyChanged}" 
-                              Margin="10,2,10,2" Foreground="Green" />
+                              Margin="10,2,10,2" Foreground="Green" />-->
                     
-                    <TextBlock Grid.Row="6" Grid.Column="0" Text="自动换行：" VerticalAlignment="Center" 
+                    <TextBlock Grid.Row="6" Grid.Column="0" Text="SSH客户端：" VerticalAlignment="Center" 
                        HorizontalAlignment="Right" Foreground="Black" />
                     <CheckBox Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2"
-                      IsChecked="{Binding RInfo.AutoWrap, UpdateSourceTrigger=PropertyChanged}"
-                      Margin="10,2,10,2" Foreground="Green" Content="(是否允许输出自动换行)" />
+                      IsChecked="{Binding RInfo.UseOpenSSH, UpdateSourceTrigger=PropertyChanged}"
+                      Margin="10,2,10,2" Foreground="Green" Content="(使用ssh.exe客户端)" />
 
-                    <TextBlock Grid.Row="7" Grid.Column="0" Text="连接时间：" VerticalAlignment="Center" 
+                    <!--<TextBlock Grid.Row="7" Grid.Column="0" Text="连接时间：" VerticalAlignment="Center" 
                        HorizontalAlignment="Right" Foreground="Black" />
                     <xceed:TimeSpanUpDown Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2"
                       Value="{Binding RInfo.KeepAliveInterval, UpdateSourceTrigger=PropertyChanged}"

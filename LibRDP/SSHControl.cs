@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using LibRDP.WinInterop;
+using LibRDP;
 
 namespace LibRDP
 {
@@ -18,7 +19,7 @@ namespace LibRDP
     {
         protected static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-        public const string Putty = "putty.exe";
+        public string SSHClient = "putty.exe";
         public SshInfo SInfo { get; set; }
 
         public SSHControl(RemoteInfo sinfo)
@@ -44,34 +45,33 @@ namespace LibRDP
                 pass = Utils.DecryptChaCha20(this.SInfo.Password, RemoteInfo.Nonce, RemoteInfo.SHA256);
 
             StringBuilder sb = new StringBuilder();
-            sb.Append($"-ssh -C -P {this.SInfo.Port} ");
-
-            if (!string.IsNullOrWhiteSpace(this.SInfo.User))
-                sb.Append($"-l {this.SInfo.User} ");
-
-            if (!string.IsNullOrWhiteSpace(pass))
-                sb.Append($"-pw {pass} ");
-
-            sb.Append(this.SInfo.Ip);
-            ProcessStartInfo info = new ProcessStartInfo(Putty, sb.ToString())
+            if (this.SInfo.UseOpenSSH)
             {
-                UseShellExecute = false,
-                WindowStyle = ProcessWindowStyle.Hidden
-            };
+                SSHClient = @"ssh.exe";
+                sb.Append($" -p {this.SInfo.Port} ");
+                if (!string.IsNullOrWhiteSpace(this.SInfo.User))
+                    sb.Append($" -l {this.SInfo.User} ");
 
-            this.Client = Process.Start(info);
-            this.Client.EnableRaisingEvents = true;
+                sb.Append(this.SInfo.Ip);
+            }
+            else
+            {
+                sb.Append($"-ssh -C -P {this.SInfo.Port} ");
+
+                if (!string.IsNullOrWhiteSpace(this.SInfo.User))
+                    sb.Append($"-l {this.SInfo.User} ");
+
+                if (!string.IsNullOrWhiteSpace(pass))
+                    sb.Append($"-pw {pass} ");
+
+                sb.Append(this.SInfo.Ip);
+            }
+
+            this.Client = SSHClient.Start(sb.ToString());
             this.Client.Exited += this.Client_Exited;
-            Logger.Info("WaitForInputIdle: " + this.Client.WaitForInputIdle());
 
-            var handle = this.Client.MainWindowHandle;
-            WindowInterop.SetParent(handle, this.Handle);
-            WindowInterop.ShowWindow(handle, WindowInterop.SW_MAXIMIZE);
-            
-            var src = WindowInterop.GetWindowLong(handle, WindowInterop.GWL_STYLE);
-            //src &= (uint)(~WindowStyles.WS_CAPTION);
-            src &= (uint)(~(WindowStyles.WS_CAPTION | WindowStyles.WS_BORDER | WindowStyles.WS_THICKFRAME));
-            WindowInterop.SetWindowLong(handle, WindowInterop.GWL_STYLE, src);     
+            if(this.Client.FuseForm(this.Handle))
+                pass.SimulateSendKeys();
 
             this.SInfo.ConnectedStatus = ConnectedStatus.正常;
         }
