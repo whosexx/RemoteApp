@@ -53,7 +53,8 @@ namespace LibRDP
             this.Client = Putty.Start(sb.ToString());
             this.Client.Exited += this.Client_Exited;
             
-            this.Client.FuseForm(this.Handle, 500);
+            this.Client.FuseForm(this.Handle);
+            System.Threading.Thread.Sleep(250);
             pass.SimulateSendKeys();
 
             this.SInfo.ConnectedStatus = ConnectedStatus.正常;

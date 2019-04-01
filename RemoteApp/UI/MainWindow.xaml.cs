@@ -17,6 +17,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using LibRDP;
 using System.Windows.Interop;
+using System.Globalization;
 
 namespace RemoteApp.UI
 {
@@ -925,7 +926,13 @@ namespace RemoteApp.UI
             if (!(client is RemoteClient))
                 return;
 
+            //设置语言为英语
+            var lan = System.Windows.Forms.InputLanguage.FromCulture(CultureInfo.GetCultureInfo(1033));
+            if (lan != null)
+                System.Windows.Forms.InputLanguage.CurrentInputLanguage = lan;
+
             client.Active();
+            System.Threading.Thread.Sleep(100);
             client.RInfo.Password.DecryptChaCha20(Properties.Settings.Default.Nonce, Properties.Settings.Default.SHA256).SimulateSendKeys();
         }
 

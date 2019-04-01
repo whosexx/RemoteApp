@@ -58,7 +58,7 @@ namespace LibRDP
         //      WS_BORDER = 0x00800000;
 
 
-            public static readonly char[] Specials = new char[] { '+', '^', '%', '~', '(', ')' };
+        public static readonly char[] Specials = new char[] { '+', '^', '%', '~', '(', ')' };
         public static void SimulateSendKeys(this string keys)
         {
             //模拟发送+、^、%、~及圆括号 ( ) ，要将它放在大括号 ({}) 当中

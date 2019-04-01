@@ -69,6 +69,7 @@ namespace LibRDP.WinInterop
             return Client;
         }
 
+        public static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         public static bool FuseForm(this Process p, IntPtr parents, int ms = 250)
         {
             bool cmd = false;
@@ -81,11 +82,12 @@ namespace LibRDP.WinInterop
 
             var handle = p.MainWindowHandle;
             WindowInterop.SetParent(handle, parents);
-            WindowInterop.ShowWindow(handle, WindowInterop.SW_MAXIMIZE);
+            Logger.Info("ShowWindow: " + WindowInterop.ShowWindow(handle, WindowInterop.SW_MAXIMIZE));
 
             var src = WindowInterop.GetWindowLong(handle, WindowInterop.GWL_STYLE);
+            Logger.Info("GetWindowLong: " + src);
             src &= (uint)(~(WindowStyles.WS_CAPTION | WindowStyles.WS_BORDER | WindowStyles.WS_THICKFRAME));
-            WindowInterop.SetWindowLong(handle, WindowInterop.GWL_STYLE, src);
+            Logger.Info("SetWindowLong: " + WindowInterop.SetWindowLong(handle, WindowInterop.GWL_STYLE, src));
 
             return cmd;
         }

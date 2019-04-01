@@ -70,8 +70,11 @@ namespace LibRDP
             this.Client = SSHClient.Start(sb.ToString());
             this.Client.Exited += this.Client_Exited;
 
-            if(this.Client.FuseForm(this.Handle, 500))
+            if (this.Client.FuseForm(this.Handle))
+            {
+                System.Threading.Thread.Sleep(250);
                 pass.SimulateSendKeys();
+            }
 
             this.SInfo.ConnectedStatus = ConnectedStatus.正常;
         }
@@ -92,8 +95,7 @@ namespace LibRDP
 
         private bool manual = false;
         public void Disconnect()
-        {
-            Logger.Info("ssh 断开连接。。。");            
+        {      
             if (this.SInfo.ConnectedStatus != ConnectedStatus.正常
                 && this.SInfo.ConnectedStatus != ConnectedStatus.正在连接)
                 return;
