@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
@@ -74,6 +75,40 @@ namespace LibRDP
         }
 
 
+        private static readonly long IP10_Start = IPAddress.Parse("10.0.0.0").Address;
+        private static readonly long IP10_End = IPAddress.Parse("10.255.255.255").Address;
+
+        private static readonly long IP172_Start = IPAddress.Parse("172.16.0.0").Address;
+        private static readonly long IP172_End = IPAddress.Parse("172.31.255.255").Address;
+
+        private static readonly long IP192_Start = IPAddress.Parse("192.168.0.0").Address;
+        private static readonly long IP192_End = IPAddress.Parse("192.168.255.255").Address;
+        /// <summary>
+        /// 10.0.0.0~10.255.255.255（A类）
+        /// 172.16.0.0~172.31.255.255（B类）
+        /// 192.168.0.0~192.168.255.255（C类）
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsLocal(this string ip)
+        {
+            if (!IPAddress.TryParse(ip, out var addr))
+                return false;
+
+            if (IPAddress.IsLoopback(addr))
+                return true;
+
+            var l = addr.Address;
+            if (l >= IP10_Start && l <= IP10_End)
+                return true;
+
+            if (l >= IP172_Start && l <= IP172_End)
+                return true;
+
+            if (l >= IP192_Start && l <= IP192_End)
+                return true;
+
+            return false;
+        }
         
 
         public static string CalcSHA256(this string value)

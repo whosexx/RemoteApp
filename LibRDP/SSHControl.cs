@@ -72,8 +72,15 @@ namespace LibRDP
 
             if (this.Client.FuseForm(this.Handle))
             {
-                System.Threading.Thread.Sleep(250);
-                pass.SimulateSendKeys();
+                Task.Run(() =>
+                {
+                    int ms = 2000;
+                    if (this.SInfo.Ip.IsLocal())
+                        ms = 100;
+
+                    System.Threading.Thread.Sleep(ms);
+                    pass.SimulateSendKeys();
+                });
             }
 
             this.SInfo.ConnectedStatus = ConnectedStatus.正常;
